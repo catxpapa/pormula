@@ -1,0 +1,191 @@
+{
+  "formulas": [
+    {
+      "_id": "formula-001",
+      "title": "基础绘画公式",
+      "content": "创作一幅关于 #{画面主题} 的图片，图片看上去是一个 #{形象}，注意表达 #{细节}，画面环境是 #{环境描述}，这幅画具有 #{审美风格} 的风格。[#{模型参数}]",
+      "description": "适用于大多数绘画AI模型的基础提示词公式",
+      "author": "LazyCAT Team",
+      "models": ["model-001", "model-002"],
+      "isPinned": true,
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "updatedAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "_id": "formula-002",
+      "title": "人物肖像公式",
+      "content": "画一个 #{年龄} 的 #{性别}，#{种族} 特征，#{表情}，穿着 #{服装}，#{发型}，#{背景环境}，#{光影效果}，#{艺术风格}",
+      "description": "专门用于人物肖像生成的提示词公式",
+      "author": "LazyCAT Team",
+      "models": ["model-001"],
+      "isPinned": false,
+      "createdAt": "2024-01-02T00:00:00.000Z",
+      "updatedAt": "2024-01-02T00:00:00.000Z"
+    }
+  ],
+  "models": [
+    {
+      "_id": "model-001",
+      "name": "Midjourney",
+      "slug": "midjourney",
+      "version": "6.0",
+      "category": "绘画模型",
+      "sortOrder": 1,
+      "isPinned": true
+    },
+    {
+      "_id": "model-002",
+      "name": "FLUX",
+      "slug": "flux",
+      "version": "1.0",
+      "category": "绘画模型",
+      "sortOrder": 2,
+      "isPinned": true
+    },
+    {
+      "_id": "model-003",
+      "name": "ChatGPT",
+      "slug": "chatgpt",
+      "version": "4.0",
+      "category": "文本模型",
+      "sortOrder": 3,
+      "isPinned": false
+    }
+  ],
+  "snippets": [
+    {
+      "_id": "snippet-001",
+      "title": "美女",
+      "content": "beautiful woman",
+      "tags": ["tag-001"],
+      "isPinned": true,
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "updatedAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "_id": "snippet-002",
+      "title": "帅哥",
+      "content": "handsome man",
+      "tags": ["tag-001"],
+      "isPinned": false,
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "updatedAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "_id": "snippet-003",
+      "title": "小猫",
+      "content": "cute kitten",
+      "tags": ["tag-001"],
+      "isPinned": false,
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "updatedAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "_id": "snippet-004",
+      "title": "微笑",
+      "content": "smiling",
+      "tags": ["tag-002"],
+      "isPinned": false,
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "updatedAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "_id": "snippet-005",
+      "title": "优雅姿态",
+      "content": "elegant pose",
+      "tags": ["tag-003"],
+      "isPinned": false,
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "updatedAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "_id": "snippet-006",
+      "title": "森林背景",
+      "content": "forest background",
+      "tags": ["tag-004"],
+      "isPinned": false,
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "updatedAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "_id": "snippet-007",
+      "title": "写实风格",
+      "content": "realistic style",
+      "tags": ["tag-005"],
+      "isPinned": true,
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "updatedAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "_id": "snippet-008",
+      "title": "高清画质",
+      "content": "--quality 2 --stylize 1000",
+      "tags": ["tag-006"],
+      "isPinned": false,
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "updatedAt": "2024-01-01T00:00:00.000Z"
+    }
+  ],
+  "tags": [
+    {
+      "_id": "tag-001",
+      "slug": "画面主题",
+      "name": "画面主题",
+      "isMultiSelect": false,
+      "sortOrder": 1,
+      "isPinned": true
+    },
+    {
+      "_id": "tag-002",
+      "slug": "形象",
+      "name": "形象",
+      "isMultiSelect": false,
+      "sortOrder": 2,
+      "isPinned": true
+    },
+    {
+      "_id": "tag-003",
+      "slug": "细节",
+      "name": "细节",
+      "isMultiSelect": true,
+      "sortOrder": 3,
+      "isPinned": false
+    },
+    {
+      "_id": "tag-004",
+      "slug": "环境描述",
+      "name": "环境描述",
+      "isMultiSelect": false,
+      "sortOrder": 4,
+      "isPinned": false
+    },
+    {
+      "_id": "tag-005",
+      "slug": "审美风格",
+      "name": "审美风格",
+      "isMultiSelect": false,
+      "sortOrder": 5,
+      "isPinned": true
+    },
+    {
+      "_id": "tag-006",
+      "slug": "模型参数",
+      "name": "模型参数",
+      "isMultiSelect": true,
+      "sortOrder": 6,
+      "isPinned": false
+    }
+  ],
+  "settings": {
+    "theme": "dark",
+    "language": "zh-CN",
+    "autoSave": true,
+    "maxSnippets": 1000,
+    "maxFormulas": 500,
+    "defaultModel": "model-001",
+    "showPinnedFirst": true,
+    "enableNotifications": true,
+    "dataVersion": "1.0.0",
+    "lastUpdated": "2024-01-01T00:00:00.000Z"
+  }
+}

@@ -3,31 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>测试页面 - 喵咒·AI Spellbook</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>喵咒·AI Spellbook - 测试页面</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="importmap">
+    {
+      "imports": {
+        "@lazycatcloud/minidb": "https://cdn.skypack.dev/@lazycatcloud/minidb"
+      }
+    }
+    </script>
+    <style>
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .test-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        .test-result {
+            background: var(--bg-dark);
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .test-success {
+            color: #4CAF50;
+        }
+        .test-error {
+            color: #f44336;
+        }
+        .test-info {
+            color: #2196F3;
+        }
+        .test-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <h1>🧪 测试页面</h1>
-            <a href="index.html" class="btn btn-secondary">返回主页</a>
+    <div class="test-container">
+        <button class="back-button action-button action-button--secondary" onclick="window.location.href='/'">
+            <i class="fas fa-arrow-left"></i> 返回主页
+        </button>
+
+        <header style="text-align: center; margin-bottom: 30px;">
+            <h1>喵咒·AI Spellbook 测试页面</h1>
+            <p>系统功能测试与验证</p>
         </header>
 
-        <main class="main-content">
-            <div class="test-section">
-                <h2>API 测试</h2>
-                <button onclick="testAPI(^)" class="btn btn-primary">测试 API 连接</button>
-                <div id="testResult" class="test-result"></div>
+        <!-- 系统信息测试 -->
+        <section class="test-section">
+            <h3><i class="fas fa-info-circle"></i> 系统信息测试</h3>
+            <div class="test-buttons">
+                <button id="test-system-info" class="action-button action-button--primary">
+                    <i class="fas fa-server"></i> 获取系统信息
+                </button>
+                <button id="test-health-check" class="action-button action-button--secondary">
+                    <i class="fas fa-heartbeat"></i> 健康检查
+                </button>
             </div>
+            <div id="system-info-result" class="test-result"></div>
+        </section>
 
-            <div class="test-section">
-                <h2>数据库测试</h2>
-                <button onclick="testDatabase(^)" class="btn btn-primary">测试数据库连接</button>
-                <div id="dbTestResult" class="test-result"></div>
+        <!-- 文件存取测试 -->
+        <section class="test-section">
+            <h3><i class="fas fa-file"></i> 文件存取测试</h3>
+            <div class="test-buttons">
+                <button id="test-file-write" class="action-button action-button--primary">
+                    <i class="fas fa-edit"></i> 文件写入测试
+                </button>
+                <button id="test-file-read" class="action-button action-button--secondary">
+                    <i class="fas fa-eye"></i> 文件读取测试
+                </button>
+                <button id="test-file-operations" class="action-button action-button--primary">
+                    <i class="fas fa-cogs"></i> 完整文件操作测试
+                </button>
             </div>
-        </main>
+            <div id="file-test-result" class="test-result"></div>
+        </section>
+
+        <!-- MiniDB连接测试 -->
+        <section class="test-section">
+            <h3><i class="fas fa-database"></i> MiniDB连接测试</h3>
+            <div class="test-buttons">
+                <button id="test-minidb-connection" class="action-button action-button--primary">
+                    <i class="fas fa-plug"></i> 连接测试
+                </button>
+                <button id="test-minidb-crud" class="action-button action-button--secondary">
+                    <i class="fas fa-exchange-alt"></i> CRUD操作测试
+                </button>
+                <button id="test-minidb-query" class="action-button action-button--primary">
+                    <i class="fas fa-search"></i> 查询功能测试
+                </button>
+            </div>
+            <div id="minidb-test-result" class="test-result"></div>
+        </section>
+
+        <!-- 数据初始化测试 -->
+        <section class="test-section">
+            <h3><i class="fas fa-download"></i> 数据初始化测试</h3>
+            <div class="test-buttons">
+                <button id="test-init-data" class="action-button action-button--primary">
+                    <i class="fas fa-database"></i> 获取初始化数据
+                </button>
+                <button id="test-load-to-minidb" class="action-button action-button--secondary">
+                    <i class="fas fa-upload"></i> 加载到MiniDB
+                </button>
+                <button id="test-data-validation" class="action-button action-button--primary">
+                    <i class="fas fa-check-circle"></i> 数据验证
+                </button>
+            </div>
+            <div id="init-data-result" class="test-result"></div>
+        </section>
+
+        <!-- 设置存储测试 -->
+        <section class="test-section">
+            <h3><i class="fas fa-cog"></i> 设置存储测试</h3>
+            <div class="test-buttons">
+                <button id="test-settings-read" class="action-button action-button--primary">
+                    <i class="fas fa-eye"></i> 读取设置
+                </button>
+                <button id="test-settings-write" class="action-button action-button--secondary">
+                    <i class="fas fa-save"></i> 写入设置
+                </button>
+                <button id="test-settings-update" class="action-button action-button--primary">
+                    <i class="fas fa-edit"></i> 更新设置
+                </button>
+            </div>
+            <div id="settings-test-result" class="test-result"></div>
+        </section>
+
+        <!-- 综合测试 -->
+        <section class="test-section">
+            <h3><i class="fas fa-tasks"></i> 综合测试</h3>
+            <div class="test-buttons">
+                <button id="test-all" class="action-button action-button--primary">
+                    <i class="fas fa-play"></i> 运行所有测试
+                </button>
+                <button id="create-test-data" class="action-button action-button--secondary">
+                    <i class="fas fa-plus"></i> 创建测试数据
+                </button>
+                <button id="cleanup-test-data" class="action-button" style="background-color: #f44336;">
+                    <i class="fas fa-trash"></i> 清理测试数据
+                </button>
+            </div>
+            <div id="comprehensive-test-result" class="test-result"></div>
+        </section>
+
+        <!-- 测试状态 -->
+        <section class="test-section">
+            <h3><i class="fas fa-chart-line"></i> 测试状态</h3>
+            <div id="test-status" class="test-result">
+                <div class="test-info">等待开始测试...</div>
+            </div>
+        </section>
     </div>
 
-    <script src="js/test.js"></script>
+    <!-- 脚本文件 -->
+    <script type="module" src="/js/minidb.js"></script>
+    <script type="module" src="/js/test.js"></script>
 </body>
 </html>

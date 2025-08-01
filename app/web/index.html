@@ -4,40 +4,182 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>喵咒·AI Spellbook</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="importmap">
+    {
+      "imports": {
+        "@lazycatcloud/minidb": "https://cdn.skypack.dev/@lazycatcloud/minidb"
+      }
+    }
+    </script>
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <div class="logo">
-                <h1>🐱 喵咒·AI Spellbook</h1>
-                <p>以表达公式的形式组合关键词句片段，形成更好的提示词</p>
+    <div id="app-container" class="app-container">
+        <!-- 应用头部 -->
+        <header id="app-header" class="app-header">
+            <div id="app-logo" class="app-logo">
+                <img src="/assets/logo.png" alt="喵咒·AI Spellbook" />
+            </div>
+            <h1 id="app-title" class="app-title">喵咒·AI Spellbook</h1>
+            <div class="header-actions">
+                <button id="test-page-btn" class="action-button action-button--secondary">
+                    <i class="fas fa-flask"></i> 测试页面
+                </button>
+                <button id="settings-btn" class="action-button action-button--secondary">
+                    <i class="fas fa-cog"></i> 设置
+                </button>
             </div>
         </header>
 
-        <main class="main-content">
-            <div class="formula-builder">
-                <h2>公式构建器</h2>
-                <div class="formula-input">
-                    <input type="text" id="formulaName" placeholder="输入公式名称..." class="formula-name-input">
-                    <textarea id="formulaContent" placeholder="在此输入您的提示词公式..." class="edit-textarea"></textarea>
-                    <div class="edit-actions">
-                        <button onclick="saveFormula(^)" class="btn btn-primary">保存公式</button>
-                        <button onclick="clearFormula(^)" class="btn btn-secondary">清空</button>
+        <!-- 主要内容区 -->
+        <main id="app-main" class="app-main">
+            <!-- 侧边栏 -->
+            <aside id="sidebar-container" class="sidebar-container">
+                <button id="sidebar-toggle" class="sidebar-toggle mobile">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <div id="sidebar-content" class="sidebar-content">
+                    <!-- 模型过滤器 -->
+                    <div id="model-filter" class="model-filter">
+                        <select id="model-filter-dropdown" class="filter-dropdown">
+                            <option value="">所有模型</option>
+                        </select>
                     </div>
-                </div>
-            </div>
 
-            <div class="formula-list">
-                <h2>已保存的公式</h2>
-                <div id="formulaContainer" class="formula-container">
-                    <!-- 公式列表将在这里动态生成 -->
+                    <!-- 搜索框 -->
+                    <div id="formula-search" class="search-container">
+                        <input type="text" id="search-input" class="search-input" placeholder="搜索公式...">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
+
+                    <!-- 公式列表 -->
+                    <div id="formula-list" class="formula-list">
+                        <div class="loading-placeholder">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <span>加载中...</span>
+                        </div>
+                    </div>
+
+                    <!-- 添加公式按钮 -->
+                    <button id="add-formula-btn" class="action-button action-button--primary">
+                        <i class="fas fa-plus"></i> 添加公式
+                    </button>
                 </div>
+            </aside>
+
+            <!-- 主内容区 -->
+            <div id="main-content" class="main-content">
+                <!-- 组合区域 -->
+                <section id="composition-area" class="composition-area">
+                    <!-- 模式导航 -->
+                    <nav id="mode-navigation" class="mode-navigation">
+                        <button class="mode-tab mode-tab--active" data-mode="compose">组合模式</button>
+                        <button class="mode-tab" data-mode="manual">手动修改</button>
+                        <button id="edit-formula-btn" class="edit-formula-btn">
+                            <i class="fas fa-edit"></i> 修改公式
+                        </button>
+                    </nav>
+
+                    <!-- 公式容器 -->
+                    <div id="formula-container" class="formula-container">
+                        <div class="formula-content">
+                            <div id="formula-text" class="formula-text">
+                                请从左侧选择一个公式开始...
+                            </div>
+                        </div>
+                        <div class="formula-actions">
+                            <button id="copy-btn" class="action-button action-button--secondary" disabled>
+                                <i class="fas fa-copy"></i> 复制
+                            </button>
+                            <button id="submit-btn" class="action-button action-button--primary" disabled>
+                                <i class="fas fa-paper-plane"></i> 提交
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 编辑模式容器 -->
+                    <div id="edit-mode-container" class="edit-mode-container is-hidden">
+                        <textarea id="edit-textarea" class="edit-textarea" placeholder="在此编辑公式内容..."></textarea>
+                        <div class="edit-actions">
+                            <input type="text" id="formula-name-input" class="formula-name-input" placeholder="公式名称">
+                            <button id="save-formula-btn" class="action-button action-button--primary">
+                                <i class="fas fa-save"></i> 保存
+                            </button>
+                            <button id="cancel-edit-btn" class="action-button action-button--secondary">
+                                <i class="fas fa-times"></i> 取消
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 片段区域 -->
+                <section id="snippet-area" class="snippet-area">
+                    <header class="snippet-header">
+                        <h3>片段库</h3>
+                        <button id="add-snippet-btn" class="action-button action-button--primary">
+                            <i class="fas fa-plus"></i> 添加片段
+                        </button>
+                    </header>
+                    
+                    <div class="snippet-container">
+                        <div id="snippet-grid" class="snippet-grid">
+                            <div class="empty-placeholder">
+                                <i class="fas fa-cube"></i>
+                                <span>点击公式中的标签按钮查看相关片段</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
         </main>
     </div>
 
-    <script src="js/minidb.js"></script>
-    <script src="js/app.js"></script>
+    <!-- 模态框容器 -->
+    <div id="modal-overlay" class="modal-overlay is-hidden">
+        <!-- 添加片段模态框 -->
+        <div id="add-snippet-modal" class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">添加新片段</h3>
+                <button class="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="tag-input-section" class="form-section">
+                    <label>标签 (格式: #{短名称|标签名})</label>
+                    <input type="text" id="tag-input" class="tag-input" placeholder="例: #{画面主题|character}">
+                    <div id="tag-suggestions" class="tag-suggestions"></div>
+                </div>
+                <div id="snippet-input-section" class="form-section">
+                    <label>片段内容</label>
+                    <div id="snippet-items" class="snippet-items">
+                        <div class="snippet-item">
+                            <input type="text" class="snippet-title-input" placeholder="片段简称">
+                            <textarea class="snippet-content-input" placeholder="片段正文内容"></textarea>
+                            <button class="remove-snippet-btn" type="button">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button id="add-snippet-item-btn" class="action-button action-button--secondary">
+                        <i class="fas fa-plus"></i> 添加更多片段
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-snippet-btn" class="action-button action-button--secondary">取消</button>
+                <button id="confirm-snippet-btn" class="action-button action-button--primary">确认添加</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 通知容器 -->
+    <div id="notification-container" class="notification-container"></div>
+
+    <!-- 脚本文件 -->
+    <script type="module" src="/js/minidb.js"></script>
+    <script type="module" src="/js/app.js"></script>
 </body>
 </html>

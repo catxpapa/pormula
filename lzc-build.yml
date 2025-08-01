@@ -1,8 +1,27 @@
-name: 喵咒·AI Spellbook
-version: 1.0.0
-description: 以表达公式的形式组合关键词句片段，形成更好的提示词
+manifest: ./lzc-manifest.yml
 
 buildscript: cd app/backend && npm install --production && cd ../..
+contentdir: ./app
 
-contentdir: app
-outputfile: pormula.lpk
+pkgout: ./
+
+icon: ./lzc-icon.png
+
+
+devshell:
+  routes:
+    - /=http://192.168.1.161:3000
+    - /api/=http://192.168.1.161:3000/api/
+  dependencies:
+    - nodejs
+    - npm
+  setupscript: |
+    ls
+    # cd ./app/web
+    # npm install
+    # npm run build
+    # cd ./..
+    # npm ./backend
+    # npm install
+    # npm run start
+

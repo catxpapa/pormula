@@ -1,0 +1,49 @@
+{
+  "name": "aispellbook-frontend",
+  "version": "1.0.0",
+  "description": "喵咒·AI Spellbook 前端应用",
+  "main": "index.html",
+  "scripts": {
+    "build": "npm run build:css && npm run build:js",
+    "build:css": "echo 'CSS构建完成'",
+    "build:js": "echo 'JS构建完成'",
+    "dev": "live-server --port=8080 --host=localhost",
+    "test": "echo 'No tests specified'",
+    "lint": "eslint js/**/*.js",
+    "format": "prettier --write js/**/*.js css/**/*.css"
+  },
+  "dependencies": {
+    "@lazycatcloud/minidb": "latest"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.50.0",
+    "live-server": "^1.2.0",
+    "postcss": "^8.4.31",
+    "prettier": "^3.0.3"
+  },
+  "keywords": [
+    "ai",
+    "spellbook",
+    "prompt",
+    "lazycat",
+    "minidb",
+    "frontend"
+  ],
+  "author": "CATxPAPA",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/catxpapa/pormula"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ],
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  }
+}

@@ -2,7 +2,7 @@ name: 喵咒·AI Spellbook
 package: cloud.lazycat.app.aispellbook
 version: 1.0.0
 description: 以表达公式的形式组合关键词句片段，形成更好的提示词
-author: LazyCAT Team
+author: CATxPAPA
 
 application:
   subdomain: aispellbook
@@ -11,9 +11,9 @@ application:
   routes:
     # 静态文件路由
     - /=file:///lzcapp/pkg/content/web/
-    - /css/=file:///lzcapp/pkg/content/web/css/
-    - /js/=file:///lzcapp/pkg/content/web/js/
-    - /assets/=file:///lzcapp/pkg/content/web/assets/
+    # - /css/=file:///lzcapp/pkg/content/web/css/
+    # - /js/=file:///lzcapp/pkg/content/web/js/
+    # - /assets/=file:///lzcapp/pkg/content/web/assets/
     
   upstreams:
     # API后端服务
@@ -24,5 +24,17 @@ application:
         cd /lzcapp/pkg/content/backend
         apk update
         apk add nodejs npm
-        npm install
-        node server.js
+        mkdir -p /lzcapp/var/uploads
+        mkdir -p /lzcapp/var/data
+        mkdir -p /lzcapp/var/logs
+        cp -r data/* /lzcapp/var/data/ 2>/dev/null || true
+        # npm install --production
+        npm start
+
+  # 文件关联配置（预留）
+  # file_handler:
+  #   mime:
+  #     - application/json
+  #     - text/plain
+  #   actions:
+  #     open: /open?file=%u
