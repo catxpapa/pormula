@@ -1,0 +1,8 @@
+name: 喵咒·AI Spellbook
+version: 1.0.0
+description: 以表达公式的形式组合关键词句片段，形成更好的提示词
+
+buildscript: cd app/backend && npm install --production && cd ../..
+
+contentdir: app
+outputfile: pormula.lpk

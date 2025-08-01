@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试页面 - 喵咒·AI Spellbook</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🧪 测试页面</h1>
+            <a href="index.html" class="btn btn-secondary">返回主页</a>
+        </header>
+
+        <main class="main-content">
+            <div class="test-section">
+                <h2>API 测试</h2>
+                <button onclick="testAPI(^)" class="btn btn-primary">测试 API 连接</button>
+                <div id="testResult" class="test-result"></div>
+            </div>
+
+            <div class="test-section">
+                <h2>数据库测试</h2>
+                <button onclick="testDatabase(^)" class="btn btn-primary">测试数据库连接</button>
+                <div id="dbTestResult" class="test-result"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/test.js"></script>
+</body>
+</html>

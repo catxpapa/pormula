@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>喵咒·AI Spellbook</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <h1>🐱 喵咒·AI Spellbook</h1>
+                <p>以表达公式的形式组合关键词句片段，形成更好的提示词</p>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="formula-builder">
+                <h2>公式构建器</h2>
+                <div class="formula-input">
+                    <input type="text" id="formulaName" placeholder="输入公式名称..." class="formula-name-input">
+                    <textarea id="formulaContent" placeholder="在此输入您的提示词公式..." class="edit-textarea"></textarea>
+                    <div class="edit-actions">
+                        <button onclick="saveFormula(^)" class="btn btn-primary">保存公式</button>
+                        <button onclick="clearFormula(^)" class="btn btn-secondary">清空</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="formula-list">
+                <h2>已保存的公式</h2>
+                <div id="formulaContainer" class="formula-container">
+                    <!-- 公式列表将在这里动态生成 -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/minidb.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
