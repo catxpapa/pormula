@@ -1,3 +1,111 @@
-{ 
-  "_comment": "init.json - 初始化数据文件，包含应用启动时需要的基础数据" 
-} 
+{
+  "version": "1.0.0",
+  "lastUpdated": "2024-01-01T00:00:00Z",
+  "models": [
+    {
+      "modelId": "midjourney-v6",
+      "name": "Midjourney",
+      "version": "v6.0",
+      "sortOrder": 1,
+      "isActive": true,
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "modelId": "flux-dev",
+      "name": "FLUX",
+      "version": "dev",
+      "sortOrder": 2,
+      "isActive": true,
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "modelId": "llm-general",
+      "name": "LLM通用",
+      "version": "1.0",
+      "sortOrder": 3,
+      "isActive": true,
+      "createdAt": "2024-01-01T00:00:00Z"
+    }
+  ],
+  "tags": [
+    {
+      "tagId": "character",
+      "slug": "character",
+      "displayName": "角色",
+      "isMultiSelect": false,
+      "sortOrder": 1,
+      "isTop": true,
+      "parentId": null,
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "tagId": "style",
+      "slug": "style",
+      "displayName": "风格",
+      "isMultiSelect": true,
+      "sortOrder": 2,
+      "isTop": true,
+      "parentId": null,
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "tagId": "environment",
+      "slug": "environment",
+      "displayName": "环境",
+      "isMultiSelect": false,
+      "sortOrder": 3,
+      "isTop": false,
+      "parentId": null,
+      "createdAt": "2024-01-01T00:00:00Z"
+    }
+  ],
+  "snippets": [
+    {
+      "snippetId": "char-001",
+      "shortName": "美女",
+      "content": "beautiful woman",
+      "tagIds": ["character"],
+      "isTop": true,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "char-002",
+      "shortName": "男人",
+      "content": "handsome man",
+      "tagIds": ["character"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "style-001",
+      "shortName": "写实",
+      "content": "photorealistic, highly detailed",
+      "tagIds": ["style"],
+      "isTop": true,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    }
+  ],
+  "formulas": [
+    {
+      "formulaId": "formula-001",
+      "title": "基础人物画像",
+      "content": "Create a #{character} in #{style} style, set in #{environment}",
+      "description": "用于生成基础人物画像的公式模板",
+      "author": "系统默认",
+      "modelIds": ["midjourney-v6", "flux-dev"],
+      "isTop": true,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    }
+  ],
+  "settings": {
+    "theme": "dark",
+    "language": "zh-CN",
+    "autoSave": true,
+    "maxSnippets": 500,
+    "defaultModel": "midjourney-v6"
+  }
+}

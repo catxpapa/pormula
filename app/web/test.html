@@ -1,2 +1,874 @@
 <!-- test.html - 测试页面 --> 
 <!-- 用于功能测试和调试的页面 --> 
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Spellbook - 系统测试</title>
+    <script type="importmap">
+    {
+        "imports": {
+            "@lazycatcloud/minidb": "https://cdn.skypack.dev/@lazycatcloud/minidb"
+        }
+    }
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a1a;
+            color: #ffffff;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #00aabb;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .test-section {
+            background: #2a2a2a;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .test-section h2 {
+            color: #00aabb;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #00aabb;
+            padding-bottom: 5px;
+        }
+        
+        .test-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background: #00aabb;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #008899;
+        }
+        
+        button:disabled {
+            background: #555;
+            cursor: not-allowed;
+        }
+        
+        .success {
+            background: #28a745;
+        }
+        
+        .error {
+            background: #dc3545;
+        }
+        
+        .warning {
+            background: #ffc107;
+            color: #000;
+        }
+        
+        .test-result {
+            background: #333;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-success { background: #28a745; }
+        .status-error { background: #dc3545; }
+        .status-pending { background: #ffc107; }
+        .status-unknown { background: #6c757d; }
+        
+        input, textarea {
+            background: #333;
+            color: white;
+            border: 1px solid #555;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin: 5px;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .cleanup-section {
+            background: #3a1a1a;
+            border: 2px solid #dc3545;
+        }
+        
+        .cleanup-section h2 {
+            color: #dc3545;
+            border-bottom-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐱 AI Spellbook 系统测试</h1>
+        
+        <!-- 系统状态检查 -->
+        <div class="test-section">
+            <h2>📊 系统状态检查</h2>
+            <div class="test-controls">
+                <button onclick="checkSystemHealth()">检查系统健康状态</button>
+                <button onclick="checkDirectories()">检查目录结构</button>
+            </div>
+            <div id="system-status">
+                <p><span class="status-indicator status-unknown"></span>后端API连接: 未检查</p>
+                <p><span class="status-indicator status-unknown"></span>MiniDB连接: 未检查</p>
+                <p><span class="status-indicator status-unknown"></span>文件系统: 未检查</p>
+            </div>
+            <div class="test-result" id="system-result"></div>
+        </div>
+        
+        <!-- 后端API测试 -->
+        <div class="test-section">
+            <h2>🔌 后端API测试</h2>
+            <div class="test-controls">
+                <button onclick="testBackendHealth()">健康检查</button>
+                <button onclick="testInitData()">获取初始化数据</button>
+                <button onclick="testSettings()">测试设置接口</button>
+            </div>
+            <div class="test-result" id="api-result"></div>
+        </div>
+        
+        <!-- 文件存储测试 -->
+        <div class="test-section">
+            <h2>📁 文件存储测试</h2>
+            <div class="input-group">
+                <input type="text" id="test-filename" placeholder="测试文件名" value="storage_test">
+                <input type="text" id="test-content" placeholder="测试内容" value="Hello AI Spellbook!">
+            </div>
+            <div class="test-controls">
+                <button onclick="testFileWrite()">写入文件</button>
+                <button onclick="testFileRead()">读取文件</button>
+                <button onclick="testDataSave()">保存JSON数据</button>
+                <button onclick="testDataLoad()">加载JSON数据</button>
+            </div>
+            <div class="test-result" id="file-result"></div>
+        </div>
+        
+        <!-- MiniDB测试 -->
+        <div class="test-section">
+            <h2>🗄️ MiniDB数据库测试</h2>
+            <div class="test-controls">
+                <button onclick="testMiniDBConnection()">连接测试</button>
+                <button onclick="testMiniDBOperations()">基础操作测试</button>
+                <button onclick="testDataInitialization()">数据初始化测试</button>
+                <button onclick="testMiniDBQueries()">查询功能测试</button>
+            </div>
+            <div class="test-result" id="minidb-result"></div>
+        </div>
+        
+        <!-- 设置管理测试 -->
+        <div class="test-section">
+            <h2>⚙️ 设置管理测试</h2>
+            <div class="input-group">
+                <input type="text" id="setting-key" placeholder="设置键" value="testSetting">
+                <input type="text" id="setting-value" placeholder="设置值" value="testValue">
+            </div>
+            <div class="test-controls">
+                <button onclick="testSettingsRead()">读取设置</button>
+                <button onclick="testSettingsWrite()">写入设置</button>
+                <button onclick="testSettingsUpdate()">更新设置</button>
+            </div>
+            <div class="test-result" id="settings-result"></div>
+        </div>
+        
+        <!-- 综合测试 -->
+        <div class="test-section">
+            <h2>🧪 综合功能测试</h2>
+            <div class="test-controls">
+                <button onclick="runFullTest()">运行完整测试</button>
+                <button onclick="testPerformance()">性能测试</button>
+                <button onclick="generateTestReport()">生成测试报告</button>
+            </div>
+            <div class="test-result" id="comprehensive-result"></div>
+        </div>
+        
+        <!-- 清理测试数据 -->
+        <div class="test-section cleanup-section">
+            <h2>🧹 清理测试数据</h2>
+            <div class="test-controls">
+                <button onclick="cleanupTestFiles()" class="error">清理测试文件</button>
+                <button onclick="cleanupMiniDBTest()" class="error">清理MiniDB测试数据</button>
+                <button onclick="cleanupAllTestData()" class="error">清理所有测试数据</button>
+            </div>
+            <div class="test-result" id="cleanup-result"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { MiniDB } from "@lazycatcloud/minidb";
+        
+        // 全局变量
+        window.miniDB = null;
+        window.testCollections = {};
+        window.testResults = {
+            system: [],
+            api: [],
+            file: [],
+            minidb: [],
+            settings: [],
+            comprehensive: []
+        };
+        
+        // 工具函数
+        function log(section, message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logMessage = `[${timestamp}] ${message}`;
+            
+            const resultDiv = document.getElementById(`${section}-result`);
+            if (resultDiv) {
+                resultDiv.textContent += logMessage + '\n';
+                resultDiv.scrollTop = resultDiv.scrollHeight;
+            }
+            
+            console.log(logMessage);
+            
+            // 保存到测试结果
+            if (window.testResults[section]) {
+                window.testResults[section].push({
+                    timestamp,
+                    message,
+                    type
+                });
+            }
+        }
+        
+        function updateStatus(elementId, status) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                const indicator = element.querySelector('.status-indicator');
+                if (indicator) {
+                    indicator.className = `status-indicator status-${status}`;
+                }
+            }
+        }
+        
+        async function apiCall(endpoint, options = {}) {
+            try {
+                const response = await fetch(`/api${endpoint}`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    },
+                    ...options
+                });
+                
+                const data = await response.json();
+                return { success: response.ok, data, status: response.status };
+            } catch (error) {
+                return { success: false, error: error.message };
+            }
+        }
+        
+        // 系统状态检查函数
+        window.checkSystemHealth = async function() {
+            log('system', '开始系统健康检查...');
+            
+            try {
+                // 检查后端API
+                const healthCheck = await apiCall('/health');
+                if (healthCheck.success) {
+                    log('system', '✅ 后端API连接正常');
+                    updateStatus('system-status', 'success');
+                } else {
+                    log('system', '❌ 后端API连接失败');
+                    updateStatus('system-status', 'error');
+                }
+                
+                // 检查MiniDB
+                try {
+                    if (!window.miniDB) {
+                        window.miniDB = new MiniDB();
+                    }
+                    log('system', '✅ MiniDB初始化成功');
+                } catch (error) {
+                    log('system', `❌ MiniDB初始化失败: ${error.message}`);
+                }
+                
+                log('system', '系统健康检查完成');
+            } catch (error) {
+                log('system', `❌ 系统检查出错: ${error.message}`);
+            }
+        };
+        
+        window.checkDirectories = async function() {
+            log('system', '检查目录结构...');
+            
+            const testResult = await apiCall('/test/file-write', {
+                method: 'POST',
+                body: JSON.stringify({
+                    filename: 'directory_test',
+                    content: 'Directory test content'
+                })
+            });
+            
+            if (testResult.success) {
+                log('system', '✅ 文件系统可写');
+            } else {
+                log('system', '❌ 文件系统写入失败');
+            }
+        };
+        
+        // 后端API测试函数
+        window.testBackendHealth = async function() {
+            log('api', '测试后端健康检查接口...');
+            
+            const result = await apiCall('/health');
+            if (result.success) {
+                log('api', `✅ 健康检查成功: ${JSON.stringify(result.data, null, 2)}`);
+            } else {
+                log('api', `❌ 健康检查失败: ${result.error}`);
+            }
+        };
+        
+        window.testInitData = async function() {
+            log('api', '测试初始化数据接口...');
+            
+            const result = await apiCall('/init-data');
+            if (result.success) {
+                log('api', '✅ 初始化数据获取成功');
+                log('api', `数据包含: ${Object.keys(result.data.data).join(', ')}`);
+            } else {
+                log('api', `❌ 初始化数据获取失败: ${result.error}`);
+            }
+        };
+        
+        window.testSettings = async function() {
+            log('api', '测试设置接口...');
+            
+            // 读取设置
+            const readResult = await apiCall('/settings');
+            if (readResult.success) {
+                log('api', '✅ 设置读取成功');
+            } else {
+                log('api', `❌ 设置读取失败: ${readResult.error}`);
+            }
+            
+            // 写入设置
+            const testSettings = {
+                testMode: true,
+                testTimestamp: new Date().toISOString()
+            };
+            
+            const writeResult = await apiCall('/settings', {
+                method: 'POST',
+                body: JSON.stringify(testSettings)
+            });
+            
+            if (writeResult.success) {
+                log('api', '✅ 设置写入成功');
+            } else {
+                log('api', `❌ 设置写入失败: ${writeResult.error}`);
+            }
+        };
+        
+        // 文件存储测试函数
+        window.testFileWrite = async function() {
+            const filename = document.getElementById('test-filename').value;
+            const content = document.getElementById('test-content').value;
+            
+            log('file', `测试文件写入: ${filename}`);
+            
+            const result = await apiCall('/test/file-write', {
+                method: 'POST',
+                body: JSON.stringify({ filename, content })
+            });
+            
+            if (result.success) {
+                log('file', `✅ 文件写入成功: ${result.data.path}`);
+            } else {
+                log('file', `❌ 文件写入失败: ${result.error}`);
+            }
+        };
+        
+        window.testFileRead = async function() {
+            const filename = document.getElementById('test-filename').value;
+            
+            log('file', `测试文件读取: ${filename}`);
+            
+            const result = await apiCall(`/test/file-read/${filename}`);
+            
+            if (result.success) {
+                log('file', `✅ 文件读取成功: ${result.data.content}`);
+            } else {
+                log('file', `❌ 文件读取失败: ${result.error}`);
+            }
+        };
+        
+        window.testDataSave = async function() {
+            log('file', '测试JSON数据保存...');
+            
+            const testData = {
+                testId: 'test-001',
+                name: 'Test Data',
+                timestamp: new Date().toISOString(),
+                items: ['item1', 'item2', 'item3']
+            };
+            
+            const result = await apiCall('/save-data', {
+                method: 'POST',
+                body: JSON.stringify({
+                    filename: 'test_data',
+                    data: testData
+                })
+            });
+            
+            if (result.success) {
+                log('file', '✅ JSON数据保存成功');
+            } else {
+                log('file', `❌ JSON数据保存失败: ${result.error}`);
+            }
+        };
+        
+        window.testDataLoad = async function() {
+            log('file', '测试JSON数据加载...');
+            
+            const result = await apiCall('/load-data/test_data');
+            
+            if (result.success) {
+                log('file', '✅ JSON数据加载成功');
+                log('file', `数据内容: ${JSON.stringify(result.data.data, null, 2)}`);
+            } else {
+                log('file', `❌ JSON数据加载失败: ${result.error}`);
+            }
+        };
+        
+        // MiniDB测试函数
+        window.testMiniDBConnection = async function() {
+            log('minidb', '测试MiniDB连接...');
+            
+            try {
+                if (!window.miniDB) {
+                    window.miniDB = new MiniDB();
+                }
+                
+                const testCollection = window.miniDB.getCollection('test_connection');
+                window.testCollections.connection = testCollection;
+                
+                log('minidb', '✅ MiniDB连接成功');
+            } catch (error) {
+                log('minidb', `❌ MiniDB连接失败: ${error.message}`);
+            }
+        };
+        
+        window.testMiniDBOperations = async function() {
+            log('minidb', '测试MiniDB基础操作...');
+            
+            try {
+                if (!window.miniDB) {
+                    window.miniDB = new MiniDB();
+                }
+                
+                const testCollection = window.miniDB.getCollection('test_operations');
+                window.testCollections.operations = testCollection;
+                
+                // 插入测试数据
+                const testDoc = {
+                    testId: 'test-001',
+                    name: 'Test Document',
+                    value: 42,
+                    timestamp: new Date().toISOString()
+                };
+                
+                await testCollection.upsert(testDoc);
+                log('minidb', '✅ 数据插入成功');
+                
+                // 查询测试数据
+                const result = await testCollection.findOne({ testId: 'test-001' });
+                if (result) {
+                    log('minidb', '✅ 数据查询成功');
+                    log('minidb', `查询结果: ${JSON.stringify(result, null, 2)}`);
+                } else {
+                    log('minidb', '❌ 数据查询失败: 未找到数据');
+                }
+                
+            } catch (error) {
+                log('minidb', `❌ MiniDB操作失败: ${error.message}`);
+            }
+        };
+        
+        window.testDataInitialization = async function() {
+            log('minidb', '测试数据初始化...');
+            
+            try {
+                // 获取初始化数据
+                const initResult = await apiCall('/init-data');
+                if (!initResult.success) {
+                    log('minidb', '❌ 获取初始化数据失败');
+                    return;
+                }
+                
+                const initData = initResult.data.data;
+                
+                if (!window.miniDB) {
+                    window.miniDB = new MiniDB();
+                }
+                
+                // 初始化各个集合
+                const collections = {
+                    formulas: window.miniDB.getCollection('formulas'),
+                    models: window.miniDB.getCollection('models'),
+                    snippets: window.miniDB.getCollection('snippets'),
+                    tags: window.miniDB.getCollection('tags')
+                };
+                
+                // 插入初始化数据
+                for (const [collectionName, data] of Object.entries(initData)) {
+                    if (collections[collectionName] && Array.isArray(data)) {
+                        await collections[collectionName].upsert(data);
+                        log('minidb', `✅ ${collectionName} 数据初始化成功 (${data.length} 条记录)`);
+                    }
+                }
+                
+                log('minidb', '✅ 数据初始化完成');
+                
+            } catch (error) {
+                log('minidb', `❌ 数据初始化失败: ${error.message}`);
+            }
+        };
+        
+        window.testMiniDBQueries = async function() {
+            log('minidb', '测试MiniDB查询功能...');
+            
+            try {
+                if (!window.miniDB) {
+                    window.miniDB = new MiniDB();
+                }
+                
+                const modelsCollection = window.miniDB.getCollection('models');
+                
+                // 测试查询所有数据
+                const allModels = await modelsCollection.find({}).fetch();
+                log('minidb', `✅ 查询所有模型: ${allModels.length} 条记录`);
+                
+                // 测试条件查询
+                const activeModels = await modelsCollection.find({ isActive: true }).fetch();
+                log('minidb', `✅ 查询活跃模型: ${activeModels.length} 条记录`);
+                
+                // 测试排序查询
+                const sortedModels = await modelsCollection.find({}, { sort: ['sortOrder'] }).fetch();
+                log('minidb', `✅ 排序查询成功: ${sortedModels.length} 条记录`);
+                
+            } catch (error) {
+                log('minidb', `❌ 查询功能测试失败: ${error.message}`);
+            }
+        };
+        
+        // 设置管理测试函数
+        window.testSettingsRead = async function() {
+            log('settings', '测试设置读取...');
+            
+            const result = await apiCall('/settings');
+            if (result.success) {
+                log('settings', '✅ 设置读取成功');
+                log('settings', `当前设置: ${JSON.stringify(result.data.data, null, 2)}`);
+            } else {
+                log('settings', `❌ 设置读取失败: ${result.error}`);
+            }
+        };
+        
+        window.testSettingsWrite = async function() {
+            const key = document.getElementById('setting-key').value;
+            const value = document.getElementById('setting-value').value;
+            
+            log('settings', `测试设置写入: ${key} = ${value}`);
+            
+            const testSettings = {
+                [key]: value,
+                testMode: true,
+                lastTest: new Date().toISOString()
+            };
+            
+            const result = await apiCall('/settings', {
+                method: 'POST',
+                body: JSON.stringify(testSettings)
+            });
+            
+            if (result.success) {
+                log('settings', '✅ 设置写入成功');
+            } else {
+                log('settings', `❌ 设置写入失败: ${result.error}`);
+            }
+        };
+        
+        window.testSettingsUpdate = async function() {
+            log('settings', '测试设置更新...');
+            
+            // 先读取当前设置
+            const readResult = await apiCall('/settings');
+            if (!readResult.success) {
+                log('settings', '❌ 无法读取当前设置');
+                return;
+            }
+            
+            // 更新设置
+            const currentSettings = readResult.data.data;
+            currentSettings.testCounter = (currentSettings.testCounter || 0) + 1;
+            currentSettings.lastUpdate = new Date().toISOString();
+            
+            const updateResult = await apiCall('/settings', {
+                method: 'POST',
+                body: JSON.stringify(currentSettings)
+            });
+            
+            if (updateResult.success) {
+                log('settings', `✅ 设置更新成功 (计数器: ${currentSettings.testCounter})`);
+            } else {
+                log('settings', `❌ 设置更新失败: ${updateResult.error}`);
+            }
+        };
+        
+        // 综合测试函数
+        window.runFullTest = async function() {
+            log('comprehensive', '开始运行完整测试套件...');
+            
+            const tests = [
+                { name: '系统健康检查', func: checkSystemHealth },
+                { name: '后端API测试', func: testBackendHealth },
+                { name: '文件存储测试', func: testFileWrite },
+                { name: 'MiniDB连接测试', func: testMiniDBConnection },
+                { name: 'MiniDB操作测试', func: testMiniDBOperations },
+                { name: '数据初始化测试', func: testDataInitialization },
+                { name: '设置管理测试', func: testSettingsRead }
+            ];
+            
+            let passedTests = 0;
+            let totalTests = tests.length;
+            
+            for (const test of tests) {
+                try {
+                    log('comprehensive', `执行测试: ${test.name}`);
+                    await test.func();
+                    passedTests++;
+                    log('comprehensive', `✅ ${test.name} 通过`);
+                } catch (error) {
+                    log('comprehensive', `❌ ${test.name} 失败: ${error.message}`);
+                }
+                
+                // 添加延迟避免过快执行
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+            
+            log('comprehensive', `测试完成: ${passedTests}/${totalTests} 通过`);
+            
+            if (passedTests === totalTests) {
+                log('comprehensive', '🎉 所有测试通过！系统运行正常');
+            } else {
+                log('comprehensive', '⚠️ 部分测试失败，请检查相关功能');
+            }
+        };
+        
+        window.testPerformance = async function() {
+            log('comprehensive', '开始性能测试...');
+            
+            const startTime = performance.now();
+            
+            try {
+                // API响应时间测试
+                const apiStart = performance.now();
+                await apiCall('/health');
+                const apiTime = performance.now() - apiStart;
+                log('comprehensive', `API响应时间: ${apiTime.toFixed(2)}ms`);
+                
+                // MiniDB操作性能测试
+                if (!window.miniDB) {
+                    window.miniDB = new MiniDB();
+                }
+                
+                const perfCollection = window.miniDB.getCollection('performance_test');
+                
+                const dbStart = performance.now();
+                const testData = Array.from({ length: 100 }, (_, i) => ({
+                    id: i,
+                    name: `Test Item ${i}`,
+                    timestamp: new Date().toISOString()
+                }));
+                
+                await perfCollection.upsert(testData);
+                const dbTime = performance.now() - dbStart;
+                log('comprehensive', `MiniDB批量插入100条记录耗时: ${dbTime.toFixed(2)}ms`);
+                
+                // 查询性能测试
+                const queryStart = performance.now();
+                const results = await perfCollection.find({}).fetch();
+                const queryTime = performance.now() - queryStart;
+                log('comprehensive', `MiniDB查询${results.length}条记录耗时: ${queryTime.toFixed(2)}ms`);
+                
+            } catch (error) {
+                log('comprehensive', `❌ 性能测试失败: ${error.message}`);
+            }
+            
+            const totalTime = performance.now() - startTime;
+            log('comprehensive', `性能测试总耗时: ${totalTime.toFixed(2)}ms`);
+        };
+        
+        window.generateTestReport = async function() {
+            log('comprehensive', '生成测试报告...');
+            
+            const report = {
+                timestamp: new Date().toISOString(),
+                testResults: window.testResults,
+                summary: {
+                    totalSections: Object.keys(window.testResults).length,
+                    totalTests: Object.values(window.testResults).reduce((sum, tests) => sum + tests.length, 0)
+                },
+                environment: {
+                    userAgent: navigator.userAgent,
+                    url: window.location.href,
+                    timestamp: new Date().toISOString()
+                }
+            };
+            
+            // 保存报告到后端
+            const saveResult = await apiCall('/save-data', {
+                method: 'POST',
+                body: JSON.stringify({
+                    filename: `test_report_${Date.now()}`,
+                    data: report
+                })
+            });
+            
+            if (saveResult.success) {
+                log('comprehensive', '✅ 测试报告已保存');
+            } else {
+                log('comprehensive', `❌ 测试报告保存失败: ${saveResult.error}`);
+            }
+            
+            log('comprehensive', `测试报告摘要: ${JSON.stringify(report.summary, null, 2)}`);
+        };
+        
+        // 清理函数
+        window.cleanupTestFiles = async function() {
+            log('cleanup', '清理测试文件...');
+            
+            const result = await apiCall('/test/cleanup', {
+                method: 'DELETE'
+            });
+            
+            if (result.success) {
+                log('cleanup', `✅ 测试文件清理成功: ${result.data.message}`);
+                log('cleanup', `清理的文件: ${result.data.cleanedFiles.join(', ')}`);
+            } else {
+                log('cleanup', `❌ 测试文件清理失败: ${result.error}`);
+            }
+        };
+        
+        window.cleanupMiniDBTest = async function() {
+            log('cleanup', '清理MiniDB测试数据...');
+            
+            try {
+                if (!window.miniDB) {
+                    log('cleanup', '⚠️ MiniDB未初始化，无需清理');
+                    return;
+                }
+                
+                // 清理测试集合
+                const testCollectionNames = [
+                    'test_connection',
+                    'test_operations', 
+                    'performance_test',
+                    'formulas',
+                    'models',
+                    'snippets',
+                    'tags'
+                ];
+                
+                for (const collectionName of testCollectionNames) {
+                    try {
+                        await window.miniDB.removeCollection(collectionName);
+                        log('cleanup', `✅ 清理集合: ${collectionName}`);
+                    } catch (error) {
+                        log('cleanup', `⚠️ 清理集合失败 ${collectionName}: ${error.message}`);
+                    }
+                }
+                
+                log('cleanup', '✅ MiniDB测试数据清理完成');
+                
+            } catch (error) {
+                log('cleanup', `❌ MiniDB清理失败: ${error.message}`);
+            }
+        };
+        
+        window.cleanupAllTestData = async function() {
+            log('cleanup', '开始清理所有测试数据...');
+            
+            // 清理文件
+            await cleanupTestFiles();
+            
+            // 清理MiniDB
+            await cleanupMiniDBTest();
+            
+            // 重置测试结果
+            window.testResults = {
+                system: [],
+                api: [],
+                file: [],
+                minidb: [],
+                settings: [],
+                comprehensive: []
+            };
+            
+            // 清空显示区域
+            const resultDivs = document.querySelectorAll('.test-result');
+            resultDivs.forEach(div => {
+                div.textContent = '';
+            });
+            
+            log('cleanup', '🧹 所有测试数据清理完成');
+        };
+        
+        // 页面加载完成后自动检查系统状态
+        document.addEventListener('DOMContentLoaded', function() {
+            log('system', '页面加载完成，开始初始化...');
+            setTimeout(checkSystemHealth, 1000);
+        });
+        
+    </script>
+</body>
+</html>

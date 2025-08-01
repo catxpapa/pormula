@@ -1,2 +1,195 @@
 <!-- index.html - 应用主页面 --> 
 <!-- 提供用户界面和主要功能入口 --> 
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>喵咒·AI Spellbook</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script type="importmap">
+    {
+        "imports": {
+            "@lazycatcloud/minidb": "https://cdn.skypack.dev/@lazycatcloud/minidb"
+        }
+    }
+    </script>
+</head>
+<body>
+    <div id="app-container" class="app-container">
+        <div class="layout-main">
+            <!-- 左侧导航栏 -->
+            <div id="sidebar-container" class="layout-sidebar">
+                <div class="p-lg">
+                    <h2 style="color: var(--primary-color); margin-bottom: var(--spacing-lg);">
+                        🐱 AI Spellbook
+                    </h2>
+                    <p class="text-center" style="color: var(--text-muted);">
+                        系统初始化中...
+                    </p>
+                </div>
+            </div>
+            
+            <!-- 主内容区 -->
+            <div id="main-content" class="layout-content">
+                <div class="p-lg flex-center flex-column" style="flex: 1;">
+                    <h1 style="color: var(--primary-color); margin-bottom: var(--spacing-lg);">
+                        欢迎使用 AI Spellbook
+                    </h1>
+                    <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                        AI提示词公式组合工具
+                    </p>
+                    <div class="flex gap-md">
+                        <a href="/test" class="button">
+                            🧪 系统测试
+                        </a>
+                        <button class="button" onclick="initializeApp()">
+                            🚀 初始化应用
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { MiniDB } from "@lazycatcloud/minidb";
+        
+        // 全局应用状态
+        window.app = {
+            miniDB: null,
+            collections: {},
+            initialized: false
+        };
+        
+        // 初始化应用
+        window.initializeApp = async function() {
+            console.log('开始初始化应用...');
+            
+            try {
+                // 初始化MiniDB
+                window.app.miniDB = new MiniDB();
+                console.log('✅ MiniDB初始化成功');
+                
+                // 获取初始化数据
+                const response = await fetch('/api/init-data');
+                const result = await response.json();
+                
+                if (result.success) {
+                    console.log('✅ 获取初始化数据成功');
+                    
+                    // 初始化集合
+                    const collections = {
+                        formulas: window.app.miniDB.getCollection('formulas'),
+                        models: window.app.miniDB.getCollection('models'),
+                        snippets: window.app.miniDB.getCollection('snippets'),
+                        tags: window.app.miniDB.getCollection('tags')
+                    };
+                    
+                    window.app.collections = collections;
+                    
+                    // 导入初始化数据
+                    const initData = result.data;
+                    for (const [collectionName, data] of Object.entries(initData)) {
+                        if (collections[collectionName] && Array.isArray(data)) {
+                            await collections[collectionName].upsert(data);
+                            console.log(`✅ ${collectionName} 数据导入成功 (${data.length} 条)`);
+                        }
+                    }
+                    
+                    window.app.initialized = true;
+                    console.log('🎉 应用初始化完成');
+                    
+                    // 更新UI
+                    updateUI();
+                    
+                } else {
+                    throw new Error(result.error || '获取初始化数据失败');
+                }
+                
+            } catch (error) {
+                console.error('❌ 应用初始化失败:', error);
+                alert(`应用初始化失败: ${error.message}`);
+            }
+        };
+        
+        // 更新UI
+        function updateUI() {
+            const sidebar = document.getElementById('sidebar-container');
+            const mainContent = document.getElementById('main-content');
+            
+            if (window.app.initialized) {
+                sidebar.innerHTML = `
+                    <div class="p-lg">
+                        <h2 style="color: var(--primary-color); margin-bottom: var(--spacing-lg);">
+                            🐱 AI Spellbook
+                        </h2>
+                        <p style="color: var(--success-color);">✅ 系统已就绪</p>
+                        <div class="mt-lg">
+                            <p style="color: var(--text-secondary); font-size: 12px;">
+                                正式功能开发中...
+                            </p>
+                        </div>
+                    </div>
+                `;
+                
+                mainContent.innerHTML = `
+                    <div class="p-lg flex-center flex-column" style="flex: 1;">
+                        <h1 style="color: var(--primary-color); margin-bottom: var(--spacing-lg);">
+                            🎉 系统初始化完成
+                        </h1>
+                        <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
+                            所有基础功能测试通过，可以开始正式开发
+                        </p>
+                        <div class="flex gap-md">
+                            <a href="/test" class="button">
+                                🧪 查看测试页面
+                            </a>
+                            <button class="button btn-success" onclick="showDataStatus()">
+                                📊 查看数据状态
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        // 显示数据状态
+        window.showDataStatus = async function() {
+            try {
+                const status = {};
+                
+                for (const [name, collection] of Object.entries(window.app.collections)) {
+                    const data = await collection.find({}).fetch();
+                    status[name] = data.length;
+                }
+                
+                alert(`数据状态:\n${Object.entries(status).map(([name, count]) => `${name}: ${count} 条记录`).join('\n')}`);
+                
+            } catch (error) {
+                alert(`获取数据状态失败: ${error.message}`);
+            }
+        };
+        
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('页面加载完成');
+            
+            // 检查是否为移动设备
+            if (window.innerWidth <= 768) {
+                document.getElementById('app-container').classList.add('mobile');
+            }
+            
+            // 监听窗口大小变化
+            window.addEventListener('resize', function() {
+                const container = document.getElementById('app-container');
+                if (window.innerWidth <= 768) {
+                    container.classList.add('mobile');
+                } else {
+                    container.classList.remove('mobile');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
