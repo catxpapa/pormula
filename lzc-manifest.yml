@@ -11,9 +11,9 @@ application:
   routes:
     # 静态文件路由
     - /=file:///lzcapp/pkg/content/web/
-    # - /css/=file:///lzcapp/pkg/content/web/css/
-    # - /js/=file:///lzcapp/pkg/content/web/js/
-    # - /assets/=file:///lzcapp/pkg/content/web/assets/
+    - /css/=file:///lzcapp/pkg/content/web/css/
+    - /js/=file:///lzcapp/pkg/content/web/js/
+    - /test=file:///lzcapp/pkg/content/web/test.html
     
   upstreams:
     # API后端服务
@@ -24,11 +24,10 @@ application:
         cd /lzcapp/pkg/content/backend
         apk update
         apk add nodejs npm
-        mkdir -p /lzcapp/var/uploads
         mkdir -p /lzcapp/var/data
-        mkdir -p /lzcapp/var/logs
-        cp -r data/* /lzcapp/var/data/ 2>/dev/null || true
-        # npm install --production
+        mkdir -p /lzcapp/var/uploads
+        mkdir -p /lzcapp/cache/temp
+        cp -f /lzcapp/pkg/content/backend/data/init.json /lzcapp/var/data/
         npm start
 
   # 文件关联配置（预留）
