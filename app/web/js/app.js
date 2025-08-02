@@ -820,7 +820,7 @@ async updateInitialData(initData) {
       }
 
       // 渲染公式显示区
-      await this.renderFormulaDisplay();
+      await this.renderFormulaDisplay('compose');
 
       // 清空片段面板
       this.clearSnippetPanel();
@@ -838,34 +838,44 @@ async updateInitialData(initData) {
     }
   }
 
-  /**
-   * 渲染公式显示区
-   * 根据当前模式显示不同的内容
-   */
-  async renderFormulaDisplay() {
+/**
+ * 渲染公式显示区
+ * @param {string} mode - 当前模式: compose/manual/edit
+ */
+renderFormulaDisplay(mode) {
     try {
-      debugLog("开始渲染公式显示区", this.state.currentMode);
-
-      const displayArea = this.elements["formula-display-area"];
-      if (!displayArea || !this.state.currentFormula) return;
-
-      switch (this.state.currentMode) {
-        case "compose":
-          await this.renderComposeMode();
-          break;
-        case "manual":
-          await this.renderManualMode();
-          break;
-        case "edit":
-          await this.renderEditMode();
-          break;
-      }
-
-      debugLog("公式显示区渲染完成");
+        debugLog('开始渲染公式显示区', mode);
+        
+        const displayArea = this.elements['formula-display-area'];
+        if (!displayArea) return;
+        
+        // 清空显示区
+        displayArea.innerHTML = '';
+        
+        // 如果没有选中的公式，显示提示信息
+        if (!this.state.currentFormula) {
+            displayArea.innerHTML = '<p class="placeholder-text">请从左侧选择一个公式开始</p>';
+            return;
+        }
+        console.log(mode)
+        // 根据模式渲染不同内容
+        if (mode === 'compose') {
+            this.renderComposeMode();
+        } else if (mode === 'manual') {
+            this.renderManualMode();
+        } else if (mode === 'edit') {
+            this.renderEditMode();
+        }else{
+             this.renderComposeMode();
+        }
+        
+        debugLog('公式显示区渲染完成');
+        
     } catch (error) {
-      console.error("渲染公式显示区失败:", error);
+        console.error('渲染公式显示区失败:', error);
+        debugLog('公式显示区渲染错误', error);
     }
-  }
+}
 
   /**
    * 渲染组合模式
@@ -1169,38 +1179,136 @@ async renderSnippetList(tag) {
     }
   }
 
-  /**
-   * 切换模式
-   * @param {string} mode - 目标模式 (compose/manual/edit)
-   */
-  async switchMode(mode) {
+/**
+ * 切换应用模式
+ * @param {string} mode - 目标模式: compose/manual/edit
+ */
+switchMode(mode) {
     try {
-      debugLog("切换模式", mode);
-
-      this.state.currentMode = mode;
-
-      // 更新标签页状态
-      document.querySelectorAll(".tab-button").forEach((tab) => {
-        tab.classList.remove("state-active");
-      });
-
-      if (mode === "compose") {
-        this.elements["tab-compose"].classList.add("state-active");
-      } else if (mode === "manual") {
-        this.elements["tab-manual"].classList.add("state-active");
-      }
-
-      // 重新渲染公式显示区
-      if (this.state.currentFormula) {
-        await this.renderFormulaDisplay();
-      }
-
-      debugLog("模式切换完成");
+        debugLog(`切换到${mode}模式`);
+        
+        if (mode === this.state.currentMode) {
+            debugLog('已经处于该模式，无需切换');
+            return;
+        }
+        
+        // 更新当前模式
+        this.state.currentMode = mode;
+        
+        // 更新导航标签状态
+        const tabCompose = this.elements['tab-compose'];
+        const tabManual = this.elements['tab-manual'];
+        const btnEditFormula = this.elements['btn-edit-formula'];
+        
+        if (tabCompose) tabCompose.classList.remove('state-active');
+        if (tabManual) tabManual.classList.remove('state-active');
+        
+        if (mode === 'compose' && tabCompose) {
+            tabCompose.classList.add('state-active');
+        } else if (mode === 'manual' && tabManual) {
+            tabManual.classList.add('state-active');
+        }
+        
+        // 编辑模式特殊处理
+        if (mode === 'edit') {
+            if (btnEditFormula) btnEditFormula.style.display = 'none';
+            // 在编辑模式中隐藏复制和提交按钮
+            if (this.elements['btn-copy']) this.elements['btn-copy'].style.display = 'none';
+            if (this.elements['btn-submit']) this.elements['btn-submit'].style.display = 'none';
+            
+            // 显示保存和取消按钮 (如果这些元素存在)
+            if (this.elements['btn-save-formula']) this.elements['btn-save-formula'].style.display = 'inline-block';
+            if (this.elements['btn-cancel-edit']) this.elements['btn-cancel-edit'].style.display = 'inline-block';
+        } else {
+            if (btnEditFormula) btnEditFormula.style.display = 'inline-block';
+            // 在非编辑模式中显示复制按钮
+            if (this.elements['btn-copy']) this.elements['btn-copy'].style.display = 'inline-block';
+            if (this.elements['btn-submit']) this.elements['btn-submit'].style.display = 'inline-block';
+            
+            // 隐藏保存和取消按钮 (如果这些元素存在)
+            if (this.elements['btn-save-formula']) this.elements['btn-save-formula'].style.display = 'none';
+            if (this.elements['btn-cancel-edit']) this.elements['btn-cancel-edit'].style.display = 'none';
+        }
+        
+        // 渲染公式显示区
+        this.renderFormulaDisplay(mode);
+        
     } catch (error) {
-      console.error("切换模式失败:", error);
-      this.showError("切换模式失败");
+        console.error('切换模式失败:', error);
+        debugLog('模式切换错误', error);
     }
-  }
+}
+
+/**
+ * 显示错误消息
+ * @param {string} message - 错误消息内容
+ */
+showError(message) {
+    console.error(message);
+    
+    // 如果有状态文本元素，更新状态
+    if (this.elements['status-text']) {
+        this.elements['status-text'].textContent = message;
+        this.elements['status-text'].style.color = '#dc3545';
+        
+        // 3秒后恢复
+        setTimeout(() => {
+            this.elements['status-text'].textContent = '就绪';
+            this.elements['status-text'].style.color = '';
+        }, 3000);
+    }
+    
+    // 非模态提示
+    const errorToast = document.createElement('div');
+    errorToast.className = 'toast-message error';
+    errorToast.textContent = message;
+    
+    document.body.appendChild(errorToast);
+    
+    // 3秒后移除
+    setTimeout(() => {
+        errorToast.style.opacity = '0';
+        setTimeout(() => {
+            document.body.removeChild(errorToast);
+        }, 300);
+    }, 3000);
+}
+
+/**
+ * 显示成功消息
+ * @param {string} message - 成功消息内容
+ */
+showSuccess(message) {
+    // 如果有状态文本元素，更新状态
+    if (this.elements['status-text']) {
+        this.elements['status-text'].textContent = message;
+        this.elements['status-text'].style.color = '#28a745';
+        
+        // 3秒后恢复
+        setTimeout(() => {
+            this.elements['status-text'].textContent = '就绪';
+            this.elements['status-text'].style.color = '';
+        }, 3000);
+    }
+    
+    // 非模态提示
+    const successToast = document.createElement('div');
+    successToast.className = 'toast-message success';
+    successToast.textContent = message;
+    
+    document.body.appendChild(successToast);
+    
+    // 3秒后移除
+    setTimeout(() => {
+        successToast.style.opacity = '0';
+        setTimeout(() => {
+            document.body.removeChild(successToast);
+        }, 300);
+    }, 3000);
+    
+    // 控制台输出
+    console.log('✅ ' + message);
+}
 
   /**
    * 复制提示词到剪贴板
@@ -1732,25 +1840,386 @@ async saveSnippetsToDatabase(snippetItems, processedTags) {
     this.showWarning("提交功能暂未实现");
   }
 
-  /**
-   * 渲染手动模式（预留）
-   */
-  async renderManualMode() {
-    debugLog("渲染手动模式（预留）");
-    const displayArea = this.elements["formula-display-area"];
-    displayArea.innerHTML =
-      '<div class="placeholder-text">手动模式开发中...</div>';
-  }
+ /**
+ * 渲染手动修改模式
+ * 显示合成后的完整提示词，并允许用户手动编辑
+ */
+renderManualMode() {
+    try {
+        debugLog('渲染手动修改模式');
+        
+        const displayArea = this.elements['formula-display-area'];
+        if (!displayArea || !this.state.currentFormula) return;
+        
+        // 创建可编辑的文本区域
+        const textArea = document.createElement('textarea');
+        textArea.className = 'formula-manual-textarea';
+        textArea.placeholder = '在此编辑提示词...';
+        
+        // 获取合成后的提示词
+        const fullPrompt = this.getComposedPrompt();
+        textArea.value = fullPrompt;
+        
+        // 添加事件监听器，当内容变化时更新
+        textArea.addEventListener('input', (e) => {
+            this.state.manualEditContent = e.target.value;
+        });
+        
+        displayArea.appendChild(textArea);
+        
+        // 保存初始内容到状态
+        this.state.manualEditContent = fullPrompt;
+        
+        debugLog('手动修改模式渲染完成');
+        
+    } catch (error) {
+        console.error('渲染手动修改模式失败:', error);
+        debugLog('手动修改模式渲染错误', error);
+    }
+}
+/**
+ * 获取合成后的完整提示词
+ * 将公式中的标签替换为已选择的片段内容
+ * @returns {string} 合成后的提示词
+ */
+getComposedPrompt() {
+    try {
+        if (!this.state.currentFormula) return '';
+        
+        // 获取公式内容
+        let formula = this.state.currentFormula.content;
+        
+        // 解析标签并替换为已选择的片段内容
+        const tagPattern = /#{([^}]+)}/g;
+        const matches = [...formula.matchAll(tagPattern)];
+        
+        for (const match of matches) {
+            const fullTag = match[0]; // #{tag}
+            const tagName = match[1]; // tag
+            
+            // 查找该标签是否已选择片段
+            const snippet = this.state.selectedSnippets.get(tagName);
+            
+            if (snippet) {
+                // 替换为片段内容
+                formula = formula.replace(fullTag, snippet.content);
+            }
+        }
+        
+        return formula;
+        
+    } catch (error) {
+        console.error('获取合成提示词失败:', error);
+        debugLog('提示词合成错误', error);
+        return this.state.currentFormula ? this.state.currentFormula.content : '';
+    }
+}
+/**
+ * 渲染编辑公式模式
+ * 允许用户编辑公式原文，包含标签的原始形式
+ */
+renderEditMode() {
+    try {
+        debugLog('渲染编辑公式模式');
+        
+        const displayArea = this.elements['formula-display-area'];
+        if (!displayArea || !this.state.currentFormula) return;
+        
+        // 创建编辑表单容器
+        const editContainer = document.createElement('div');
+        editContainer.className = 'formula-edit-container';
+        
+        // 创建公式标题输入
+        const titleLabel = document.createElement('label');
+        titleLabel.textContent = '公式名称:';
+        titleLabel.className = 'form-label';
+        
+        const titleInput = document.createElement('input');
+        titleInput.type = 'text';
+        titleInput.className = 'formula-title-input form-input';
+        titleInput.value = this.state.currentFormula.title;
+        titleInput.id = 'formula-edit-title';
+        
+        // 创建公式内容文本区域
+        const contentLabel = document.createElement('label');
+        contentLabel.textContent = '公式内容:';
+        contentLabel.className = 'form-label';
+        
+        const contentTextarea = document.createElement('textarea');
+        contentTextarea.className = 'formula-content-textarea form-textarea';
+        contentTextarea.id = 'formula-edit-content';
+        contentTextarea.rows = 5;
+        contentTextarea.placeholder = '使用 #{标签名} 添加标签，例如: Create a #{character} in #{style} style';
+        
+        // 设置公式内容，确保标签以 #{标签名} 格式显示
+        contentTextarea.value = this.formatFormulaForEditing(this.state.currentFormula.content);
+        
+        // 创建描述输入
+        const descLabel = document.createElement('label');
+        descLabel.textContent = '描述 (可选):';
+        descLabel.className = 'form-label';
+        
+        const descInput = document.createElement('input');
+        descInput.type = 'text';
+        descInput.className = 'formula-desc-input form-input';
+        descInput.value = this.state.currentFormula.description || '';
+        descInput.id = 'formula-edit-desc';
+        
+        // 创建作者输入
+        const authorLabel = document.createElement('label');
+        authorLabel.textContent = '作者 (可选):';
+        authorLabel.className = 'form-label';
+        
+        const authorInput = document.createElement('input');
+        authorInput.type = 'text';
+        authorInput.className = 'formula-author-input form-input';
+        authorInput.value = this.state.currentFormula.author || '';
+        authorInput.id = 'formula-edit-author';
+        
+        // 创建模型选择
+        const modelLabel = document.createElement('label');
+        modelLabel.textContent = '适用模型:';
+        modelLabel.className = 'form-label';
+        
+        const modelSelect = document.createElement('select');
+        modelSelect.className = 'formula-model-select form-select';
+        modelSelect.id = 'formula-edit-model';
+        modelSelect.multiple = true;
+        
+        // 加载模型选项
+        this.loadModelOptions(modelSelect);
+        
+        // 创建按钮容器
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'formula-edit-buttons';
+        
+        // 创建保存按钮
+        const saveButton = document.createElement('button');
+        saveButton.className = 'btn-primary';
+        saveButton.textContent = '保存';
+        saveButton.id = 'btn-save-formula';
+        
+        // 创建取消按钮
+        const cancelButton = document.createElement('button');
+        cancelButton.className = 'btn-secondary';
+        cancelButton.textContent = '取消';
+        cancelButton.id = 'btn-cancel-edit';
+        
+        // 添加按钮事件
+        saveButton.addEventListener('click', () => this.saveEditedFormula());
+        cancelButton.addEventListener('click', () => this.cancelFormulaEdit());
+        
+        // 将所有元素添加到表单
+        editContainer.appendChild(titleLabel);
+        editContainer.appendChild(titleInput);
+        editContainer.appendChild(contentLabel);
+        editContainer.appendChild(contentTextarea);
+        editContainer.appendChild(descLabel);
+        editContainer.appendChild(descInput);
+        editContainer.appendChild(authorLabel);
+        editContainer.appendChild(authorInput);
+        editContainer.appendChild(modelLabel);
+        editContainer.appendChild(modelSelect);
+        
+        buttonContainer.appendChild(cancelButton);
+        buttonContainer.appendChild(saveButton);
+        editContainer.appendChild(buttonContainer);
+        
+        // 将表单添加到显示区
+        displayArea.appendChild(editContainer);
+        
+        // 选中之前设置的模型
+        if (this.state.currentFormula.modelIds && modelSelect.options.length > 0) {
+            for (let i = 0; i < modelSelect.options.length; i++) {
+                if (this.state.currentFormula.modelIds.includes(modelSelect.options[i].value)) {
+                    modelSelect.options[i].selected = true;
+                }
+            }
+        }
+        
+        debugLog('编辑公式模式渲染完成');
+        
+    } catch (error) {
+        console.error('渲染编辑公式模式失败:', error);
+        debugLog('编辑公式模式渲染错误', error);
+    }
+}
 
-  /**
-   * 渲染编辑模式（预留）
-   */
-  async renderEditMode() {
-    debugLog("渲染编辑模式（预留）");
-    const displayArea = this.elements["formula-display-area"];
-    displayArea.innerHTML =
-      '<div class="placeholder-text">编辑模式开发中...</div>';
-  }
+/**
+ * 加载模型选项到选择框
+ * @param {HTMLSelectElement} selectElement - 模型选择框元素
+ */
+async loadModelOptions(selectElement) {
+    try {
+        // 获取所有模型
+        const models = await this.collections.models.find({}, { 
+            sort: ['sortOrder', 'name'] 
+        }).fetch();
+        
+        // 清空现有选项
+        selectElement.innerHTML = '';
+        
+        // 添加模型选项
+        models.forEach(model => {
+            if (model.isActive) {
+                const option = document.createElement('option');
+                option.value = model.modelId;
+                option.textContent = `${model.name} ${model.version}`;
+                selectElement.appendChild(option);
+            }
+        });
+        
+    } catch (error) {
+        console.error('加载模型选项失败:', error);
+        debugLog('模型选项加载错误', error);
+    }
+}
+
+/**
+ * 将公式内容格式化为编辑模式显示
+ * 确保标签以 #{标签名} 格式显示
+ * @param {string} content - 原始公式内容
+ * @returns {string} 格式化后的公式内容
+ */
+formatFormulaForEditing(content) {
+    try {
+        // 检查是否已经是编辑格式 (包含 #{tag})
+        if (content.includes('#{') && content.includes('}')) {
+            return content;
+        }
+        
+        // 将 #tag 格式转换为 #{tag} 格式
+        return content.replace(/#(\w+)/g, '#{$1}');
+        
+    } catch (error) {
+        console.error('格式化公式内容失败:', error);
+        debugLog('公式格式化错误', error);
+        return content;
+    }
+}
+
+/**
+ * 保存编辑后的公式
+ */
+async saveEditedFormula() {
+    try {
+        debugLog('开始保存编辑后的公式');
+        
+        // 获取表单数据
+        const titleInput = document.getElementById('formula-edit-title');
+        const contentTextarea = document.getElementById('formula-edit-content');
+        const descInput = document.getElementById('formula-edit-desc');
+        const authorInput = document.getElementById('formula-edit-author');
+        const modelSelect = document.getElementById('formula-edit-model');
+        
+        if (!titleInput || !contentTextarea) {
+            throw new Error('找不到表单元素');
+        }
+        
+        const title = titleInput.value.trim();
+        const content = contentTextarea.value.trim();
+        
+        // 验证表单
+        if (!title) {
+            this.showError('公式名称不能为空');
+            return;
+        }
+        
+        if (!content) {
+            this.showError('公式内容不能为空');
+            return;
+        }
+        
+        // 收集选中的模型ID
+        const selectedModelIds = [];
+        if (modelSelect) {
+            for (let i = 0; i < modelSelect.options.length; i++) {
+                if (modelSelect.options[i].selected) {
+                    selectedModelIds.push(modelSelect.options[i].value);
+                }
+            }
+        }
+        
+        // 检查是否是修改现有公式或创建新公式
+        const isNewFormula = title !== this.state.currentFormula.title;
+        
+        if (isNewFormula) {
+            // 检查是否已存在同名公式
+            const existingFormula = await this.collections.formulas.findOne({ 
+                title: title 
+            });
+            
+            if (existingFormula) {
+                // 确认是否覆盖
+                if (!confirm(`已存在名为"${title}"的公式，是否覆盖？`)) {
+                    return;
+                }
+            }
+        }
+        
+        // 准备公式数据
+        const formulaData = {
+            formulaId: isNewFormula ? `formula-${Date.now()}` : this.state.currentFormula.formulaId,
+            title: title,
+            content: content,
+            description: descInput ? descInput.value.trim() : '',
+            author: authorInput ? authorInput.value.trim() : '',
+            modelIds: selectedModelIds.length > 0 ? selectedModelIds : this.state.currentFormula.modelIds,
+            isTop: this.state.currentFormula.isTop,
+            updatedAt: new Date().toISOString(),
+            createdAt: isNewFormula ? new Date().toISOString() : this.state.currentFormula.createdAt
+        };
+        
+        // 保存到数据库
+        await this.collections.formulas.upsert(formulaData);
+        
+        // 更新当前公式
+        this.state.currentFormula = formulaData;
+        
+        // 切换回组合模式
+        this.switchMode('compose');
+        
+        // 刷新公式列表
+        await this.renderFormulaList();
+        
+        // 显示成功消息
+        this.showSuccess(isNewFormula ? '新公式创建成功' : '公式更新成功');
+        
+        debugLog('公式保存完成', formulaData);
+        
+    } catch (error) {
+        console.error('保存公式失败:', error);
+        debugLog('公式保存错误', error);
+        this.showError('保存公式失败: ' + error.message);
+    }
+}
+
+/**
+ * 取消公式编辑
+ */
+cancelFormulaEdit() {
+    debugLog('取消公式编辑');
+    
+    // 检查是否有未保存的更改
+    const contentTextarea = document.getElementById('formula-edit-content');
+    const titleInput = document.getElementById('formula-edit-title');
+    
+    if (contentTextarea && titleInput) {
+        const hasContentChanges = contentTextarea.value.trim() !== this.formatFormulaForEditing(this.state.currentFormula.content);
+        const hasTitleChanges = titleInput.value.trim() !== this.state.currentFormula.title;
+        
+        if (hasContentChanges || hasTitleChanges) {
+            // 确认是否放弃更改
+            if (!confirm('您有未保存的更改，确定要放弃吗？')) {
+                return;
+            }
+        }
+    }
+    
+    // 切换回组合模式
+    this.switchMode('compose');
+}
+
 
   /**
    * 验证数据完整性（调试用）

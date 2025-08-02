@@ -329,3 +329,85 @@ body {
 .status-info {
   color: var(--primary-color);
 }
+
+
+/* 手动修改模式的文本区域样式 */
+.formula-manual-textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #555;
+    background-color: #333;
+    color: white;
+    font-family: inherit;
+    font-size: inherit;
+    resize: vertical;
+}
+
+/* 编辑公式模式的表单样式 */
+.formula-edit-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+    background: #2a2a2a;
+    border-radius: 5px;
+}
+
+.formula-edit-container .form-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #00aabb;
+}
+
+.formula-edit-container .form-input,
+.formula-edit-container .form-textarea,
+.formula-edit-container .form-select {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 4px;
+    border: 1px solid #555;
+    background-color: #333;
+    color: white;
+}
+
+.formula-edit-container .form-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.formula-edit-container .form-select {
+    height: auto;
+    min-height: 100px;
+}
+
+.formula-edit-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* 提示消息样式 */
+.toast-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 4px;
+    color: white;
+    font-weight: bold;
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.toast-message.success {
+    background-color: #28a745;
+}
+
+.toast-message.error {
+    background-color: #dc3545;
+}
