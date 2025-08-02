@@ -1,12 +1,9 @@
-<!-- index.html - 应用主页面 --> 
-<!-- 提供用户界面和主要功能入口 --> 
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>喵咒·AI Spellbook</title>
-    <link rel="stylesheet" href="/css/style.css">
     <script type="importmap">
     {
         "imports": {
@@ -14,182 +11,157 @@
         }
     }
     </script>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <!-- 主应用容器 -->
     <div id="app-container" class="app-container">
-        <div class="layout-main">
-            <!-- 左侧导航栏 -->
-            <div id="sidebar-container" class="layout-sidebar">
-                <div class="p-lg">
-                    <h2 style="color: var(--primary-color); margin-bottom: var(--spacing-lg);">
-                        🐱 AI Spellbook
-                    </h2>
-                    <p class="text-center" style="color: var(--text-muted);">
-                        系统初始化中...
-                    </p>
-                </div>
+        <!-- 应用头部 -->
+        <header id="app-header" class="layout-header">
+            <div id="app-logo" class="app-logo">
+                <img src="lzc-icon.png" alt="喵咒 Logo" width="40" height="40">
             </div>
-            
-            <!-- 主内容区 -->
-            <div id="main-content" class="layout-content">
-                <div class="p-lg flex-center flex-column" style="flex: 1;">
-                    <h1 style="color: var(--primary-color); margin-bottom: var(--spacing-lg);">
-                        欢迎使用 AI Spellbook
-                    </h1>
-                    <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
-                        AI提示词公式组合工具
-                    </p>
-                    <div class="flex gap-md">
-                        <a href="/test" class="button">
-                            🧪 系统测试
-                        </a>
-                        <button class="button" onclick="initializeApp()">
-                            🚀 初始化应用
-                        </button>
+            <h1 id="app-title" class="app-title">喵咒·AI Spellbook</h1>
+        </header>
+
+        <!-- 主内容区域 -->
+        <main id="app-main" class="layout-main">
+            <!-- 侧边栏容器 -->
+            <aside id="sidebar-container" class="sidebar">
+                <!-- 移动端切换按钮 -->
+                <button id="sidebar-toggle" class="sidebar-toggle mobile">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <!-- 侧边栏内容 -->
+                <div id="sidebar-content" class="sidebar-content">
+                    <!-- 模型过滤器 -->
+                    <div id="model-filter" class="sidebar-header">
+                        <select id="model-filter-dropdown" class="form-select">
+                            <option value="">所有模型</option>
+                        </select>
+                    </div>
+
+                    <!-- 公式搜索 -->
+                    <div id="formula-search" class="sidebar-search">
+                        <div class="input-group">
+                            <input type="text" id="formula-search-input" class="form-input" placeholder="搜索公式...">
+                            <button id="search-btn" class="btn-icon">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 公式列表 -->
+                    <div id="formula-list" class="sidebar-list">
+                        <div id="formula-list-container" class="formula-list">
+                            <!-- 公式项将通过JS动态生成 -->
+                        </div>
                     </div>
                 </div>
+            </aside>
+
+            <!-- 主内容区 -->
+            <section id="main-content" class="layout-content">
+                <!-- 提示词组合区 -->
+                <div id="prompt-composer" class="prompt-composer">
+                    <!-- 模式导航 -->
+                    <nav class="mode-navigation">
+                        <button id="tab-compose" class="tab-button state-active">组合模式</button>
+                        <button id="tab-manual" class="tab-button">手动修改</button>
+                        <button id="btn-edit-formula" class="btn-secondary">修改公式</button>
+                    </nav>
+
+                    <!-- 公式显示区域 -->
+                    <div class="formula-content">
+                        <div id="formula-display-area" class="formula-display">
+                            <p class="placeholder-text">请从左侧选择一个公式开始</p>
+                        </div>
+                    </div>
+
+                    <!-- 操作按钮区 -->
+                    <div class="action-bar">
+                        <button id="btn-copy" class="btn-primary" disabled>
+                            <i class="fas fa-copy"></i> 复制
+                        </button>
+                        <button id="btn-submit" class="btn-success" style="display: none;">
+                            <i class="fas fa-paper-plane"></i> 提交
+                        </button>
+                        <div class="status-indicator">
+                            <span id="status-text">就绪</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 片段面板 -->
+                <div id="snippet-panel" class="snippet-panel">
+                    <!-- 面板头部 -->
+                    <div class="panel-header">
+                        <h3 id="current-tag-name" class="panel-title">选择标签查看片段</h3>
+                        <button id="btn-add-snippet" class="btn-primary" disabled>
+                            <i class="fas fa-plus"></i> 添加片段
+                        </button>
+                    </div>
+
+                    <!-- 片段网格 -->
+                    <div class="snippet-grid">
+                        <div id="snippet-list-container" class="snippet-list">
+                            <!-- 片段卡片将通过JS动态生成 -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 模态框覆盖层 -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+        <!-- 添加片段模态框 -->
+        <div id="add-snippet-modal" class="modal-content">
+            <div class="modal-header">
+                <h3>添加新片段</h3>
+                <button id="modal-close-btn" class="btn-icon">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="add-snippet-form">
+                    <!-- 标签输入区 -->
+                    <div class="form-group">
+                        <label class="form-label">标签 (格式: #{短名称|标签名} 或 标签名)</label>
+                        <input type="text" id="snippet-tags-input" class="form-input" placeholder="例: #{角色|character} #{风格|style}">
+                        <small class="form-help">当前标签会自动添加</small>
+                    </div>
+
+                    <!-- 片段列表区 -->
+                    <div class="form-group">
+                        <label class="form-label">片段内容</label>
+                        <div id="snippet-items-container">
+                            <div class="snippet-item-form">
+                                <input type="text" class="snippet-short-name form-input" placeholder="短名称">
+                                <textarea class="snippet-content form-textarea" placeholder="正文内容" rows="2"></textarea>
+                                <button type="button" class="btn-remove-snippet btn-danger">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="button" id="btn-add-snippet-item" class="btn-secondary">
+                            <i class="fas fa-plus"></i> 添加更多片段
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-cancel-snippet" class="btn-secondary">取消</button>
+                <button type="button" id="btn-save-snippet" class="btn-primary">保存</button>
             </div>
         </div>
     </div>
 
-    <script type="module">
-        import { MiniDB } from "@lazycatcloud/minidb";
-        
-        // 全局应用状态
-        window.app = {
-            miniDB: null,
-            collections: {},
-            initialized: false
-        };
-        
-        // 初始化应用
-        window.initializeApp = async function() {
-            console.log('开始初始化应用...');
-            
-            try {
-                // 初始化MiniDB
-                window.app.miniDB = new MiniDB();
-                console.log('✅ MiniDB初始化成功');
-                
-                // 获取初始化数据
-                const response = await fetch('/api/init-data');
-                const result = await response.json();
-                
-                if (result.success) {
-                    console.log('✅ 获取初始化数据成功');
-                    
-                    // 初始化集合
-                    const collections = {
-                        formulas: window.app.miniDB.getCollection('formulas'),
-                        models: window.app.miniDB.getCollection('models'),
-                        snippets: window.app.miniDB.getCollection('snippets'),
-                        tags: window.app.miniDB.getCollection('tags')
-                    };
-                    
-                    window.app.collections = collections;
-                    
-                    // 导入初始化数据
-                    const initData = result.data;
-                    for (const [collectionName, data] of Object.entries(initData)) {
-                        if (collections[collectionName] && Array.isArray(data)) {
-                            await collections[collectionName].upsert(data);
-                            console.log(`✅ ${collectionName} 数据导入成功 (${data.length} 条)`);
-                        }
-                    }
-                    
-                    window.app.initialized = true;
-                    console.log('🎉 应用初始化完成');
-                    
-                    // 更新UI
-                    updateUI();
-                    
-                } else {
-                    throw new Error(result.error || '获取初始化数据失败');
-                }
-                
-            } catch (error) {
-                console.error('❌ 应用初始化失败:', error);
-                alert(`应用初始化失败: ${error.message}`);
-            }
-        };
-        
-        // 更新UI
-        function updateUI() {
-            const sidebar = document.getElementById('sidebar-container');
-            const mainContent = document.getElementById('main-content');
-            
-            if (window.app.initialized) {
-                sidebar.innerHTML = `
-                    <div class="p-lg">
-                        <h2 style="color: var(--primary-color); margin-bottom: var(--spacing-lg);">
-                            🐱 AI Spellbook
-                        </h2>
-                        <p style="color: var(--success-color);">✅ 系统已就绪</p>
-                        <div class="mt-lg">
-                            <p style="color: var(--text-secondary); font-size: 12px;">
-                                正式功能开发中...
-                            </p>
-                        </div>
-                    </div>
-                `;
-                
-                mainContent.innerHTML = `
-                    <div class="p-lg flex-center flex-column" style="flex: 1;">
-                        <h1 style="color: var(--primary-color); margin-bottom: var(--spacing-lg);">
-                            🎉 系统初始化完成
-                        </h1>
-                        <p style="color: var(--text-secondary); margin-bottom: var(--spacing-xl);">
-                            所有基础功能测试通过，可以开始正式开发
-                        </p>
-                        <div class="flex gap-md">
-                            <a href="/test" class="button">
-                                🧪 查看测试页面
-                            </a>
-                            <button class="button btn-success" onclick="showDataStatus()">
-                                📊 查看数据状态
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }
-        }
-        
-        // 显示数据状态
-        window.showDataStatus = async function() {
-            try {
-                const status = {};
-                
-                for (const [name, collection] of Object.entries(window.app.collections)) {
-                    const data = await collection.find({}).fetch();
-                    status[name] = data.length;
-                }
-                
-                alert(`数据状态:\n${Object.entries(status).map(([name, count]) => `${name}: ${count} 条记录`).join('\n')}`);
-                
-            } catch (error) {
-                alert(`获取数据状态失败: ${error.message}`);
-            }
-        };
-        
-        // 页面加载完成后的初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('页面加载完成');
-            
-            // 检查是否为移动设备
-            if (window.innerWidth <= 768) {
-                document.getElementById('app-container').classList.add('mobile');
-            }
-            
-            // 监听窗口大小变化
-            window.addEventListener('resize', function() {
-                const container = document.getElementById('app-container');
-                if (window.innerWidth <= 768) {
-                    container.classList.add('mobile');
-                } else {
-                    container.classList.remove('mobile');
-                }
-            });
-        });
-    </script>
+    <!-- 加载FontAwesome图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- 主应用脚本 -->
+    <script type="module" src="js/app.js"></script>
 </body>
 </html>

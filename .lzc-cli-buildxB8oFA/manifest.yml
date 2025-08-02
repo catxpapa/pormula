@@ -3,20 +3,15 @@ package: cloud.lazycat.app.aispellbook
 version: 1.0.0
 description: 以表达公式的形式组合关键词句片段，形成更好的提示词
 author: CATxPAPA
-
 application:
   subdomain: aispellbook
   workdir: /lzcapp/pkg/content/
-  
   routes:
-    # 静态文件路由
     - /=file:///lzcapp/pkg/content/web/
-    # - /css/=file:///lzcapp/pkg/content/web/css/
-    # - /js/=file:///lzcapp/pkg/content/web/js/
-    # - /test=file:///lzcapp/pkg/content/web/test.html
-    
+    - /css/=file:///lzcapp/pkg/content/web/css/
+    - /js/=file:///lzcapp/pkg/content/web/js/
+    - /test=file:///lzcapp/pkg/content/web/test.html
   upstreams:
-    # API后端服务
     - location: /api/
       workdir: /lzcapp/pkg/content/backend/
       backend: http://127.0.0.1:3000/api/
@@ -29,12 +24,3 @@ application:
         mkdir -p /lzcapp/cache/temp
         cp -f /lzcapp/pkg/content/backend/data/init.json /lzcapp/var/data/
         npm start
-
-  # 文件关联配置（预留）
-  # file_handler:
-  #   mime:
-  #     - application/json
-  #     - text/plain
-  #   actions:
-  #     open: /open?file=%u
-

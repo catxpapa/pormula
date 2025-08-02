@@ -270,6 +270,18 @@ app.delete('/api/test/cleanup', async (req, res) => {
     }
 });
 
+// 默认路由 - 返回主页--devshell临时
+app.get('/', (req, res) => {
+    // console.log(req)
+    res.sendFile(path.join(__dirname, '../web/index.html'));
+});
+app.get('/css/style.css', (req, res) => {
+    // console.log(req)
+    res.sendFile(path.join(__dirname, '../web/css/style.css'));
+});
+
+
+
 // 错误处理中间件
 app.use((error, req, res, next) => {
     console.error('服务器错误:', error);
@@ -279,6 +291,7 @@ app.use((error, req, res, next) => {
         message: error.message
     });
 });
+
 
 // 404处理
 app.use((req, res) => {

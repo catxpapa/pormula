@@ -8,3 +8,16 @@ pkgout: ./
 icon: ./lzc-icon.png
 
 
+devshell:
+  routes:
+    - /=http://192.168.1.161:3000
+  dependencies:
+    - nodejs
+    - npm
+  # setupscript 每次进入到app container后都会执行的配置脚本
+  # - 可以为脚本的路径地址
+  # - 如果构建命令简单，也可以直接写 sh 的命令
+  # setupscript: export GOPROXY=https://goproxy.cn
+  # setupscript: ./setupscript.sh
+  # setupscript: |
+  #   export npm_config_registry=https://registry.npmmirror.com

@@ -57,6 +57,16 @@
       "isTop": false,
       "parentId": null,
       "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "tagId": "color",
+      "slug": "color",
+      "displayName": "颜色",
+      "isMultiSelect": false,
+      "sortOrder": 4,
+      "isTop": false,
+      "parentId": null,
+      "createdAt": "2024-01-01T00:00:00Z"
     }
   ],
   "snippets": [
@@ -79,11 +89,47 @@
       "createdAt": "2024-01-01T00:00:00Z"
     },
     {
+      "snippetId": "char-003",
+      "shortName": "小孩",
+      "content": "cute child",
+      "tagIds": ["character"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
       "snippetId": "style-001",
       "shortName": "写实",
       "content": "photorealistic, highly detailed",
       "tagIds": ["style"],
       "isTop": true,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "style-002",
+      "shortName": "动漫",
+      "content": "anime style, manga art",
+      "tagIds": ["style"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "env-001",
+      "shortName": "森林",
+      "content": "in a mystical forest",
+      "tagIds": ["environment"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "color-001",
+      "shortName": "红色",
+      "content": "red",
+      "tagIds": ["color"],
+      "isTop": false,
       "updatedAt": "2024-01-01T00:00:00Z",
       "createdAt": "2024-01-01T00:00:00Z"
     }
@@ -92,11 +138,22 @@
     {
       "formulaId": "formula-001",
       "title": "基础人物画像",
-      "content": "Create a #{character} in #{style} style, set in #{environment}",
+      "content": "Create a #{character} in #{style} style, wearing #{color} outfit, set in #{environment}",
       "description": "用于生成基础人物画像的公式模板",
       "author": "系统默认",
       "modelIds": ["midjourney-v6", "flux-dev"],
       "isTop": true,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "formulaId": "formula-002",
+      "title": "简单角色描述",
+      "content": "A #{character} with #{style} appearance",
+      "description": "简单的角色描述公式",
+      "author": "系统默认",
+      "modelIds": ["llm-general"],
+      "isTop": false,
       "updatedAt": "2024-01-01T00:00:00Z",
       "createdAt": "2024-01-01T00:00:00Z"
     }
