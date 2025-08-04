@@ -1,7 +1,7 @@
 name: 喵咒·AI Spellbook
 package: cloud.lazycat.app.aispellbook
 version: 1.0.0
-description: 以表达公式的形式组合关键词句片段，形成更好的提示词
+description: 用公式组合出无限变化的AI提示词
 author: CATxPAPA
 
 application:

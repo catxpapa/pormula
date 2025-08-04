@@ -4,14 +4,18 @@
 
 /* CSS变量定义 */
 :root {
-  --primary-color: #00aabb;
-  --primary-hover: #008899;
+  --primary-color: #dcd39a;
+  --primary-hover: #fcf3aa;
   --bg-dark: #1a1a1a;
   --bg-card: #2a2a2a;
-  --bg-input: #333333;
+  --bg-card-hover: #333333;
+  --bg-input: #030609;
   --text-primary: #ffffff;
-  --text-secondary: #cccccc;
-  --text-muted: #999999;
+  --text-secondary: #999999;
+  --text-muted: #666666;
+  --text-bigger: 1.2rem;
+  --text-smaller: 0.8rem;
+  --text-big: 1.5rem;
   --border-color: #555555;
   --success-color: #28a745;
   --error-color: #dc3545;
@@ -39,43 +43,144 @@ body {
   color: var(--text-primary);
   line-height: 1.6;
   font-size: 14px;
+  height: 100vh;
 }
 
 /* 布局类 */
 .app-container {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
+  max-height: 100vh;
+}
+
+#app-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  height: auto;
+  flex: 0;
+  gap: 1rem;
+  padding: var(--spacing-sm);
+  & .app-logo {
+    width: 48px;
+    height: 48px;
+    & img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  & .app-title {
+    font-size: var(--text-big);
+    font-weight: 300;
+  }
 }
 
 .layout-main {
   display: flex;
   flex: 1;
-  height: 100vh;
+  overflow: hidden;
 }
 
-.layout-sidebar {
+.sidebar {
   width: 300px;
   background: var(--bg-dark);
-  overflow-y: auto;
+  padding: var(--spacing-lg);
+  & .sidebar-toggle {
+    display: none;
+  }
   & .sidebar-header {
-    background:var(--bg-input);
+    background: var(--bg-input);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     border-radius: 1rem;
-    padding:2px;
-    & select{
-        border:none;
-        background: none;
-        margin-left: .5rem;
-      color:var(--text-primary);
-        & option{
-            background: var(--bg-input);
-        }
+    padding: 0 var(--spacing-sm);
+    & select {
+      display: none;
+      border: none;
+      background: none;
+      margin-left: 0.5rem;
+      color: var(--text-primary);
+      & option {
+        background: var(--bg-input);
+      }
+    }
+    & .input-group {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
     }
     & input {
       width: 100%;
       background: none;
-      border:none;
-      color:var(--text-primary);
+      border: none;
+      color: var(--text-primary);
+    }
+  }
+
+  & .sidebar-content {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: 100%;
+  }
+  & .sidebar-list {
+    height: 100%;
+  }
+  & .formula-list {
+    overflow-y: auto;
+    height: 100%;
+    margin-top: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: var(--spacing-sm);
+    scrollbar-width: var(--spacing-xs);
+    padding-bottom: 100px;
+    &::-webkit-scrollbar {
+      width: var(--spacing-xs);
+      background-color: var(--bg-dark);
+    }
+    & .formula-item {
+      background-color: var(--bg-card);
+      /* font-size: var(--text-bigger); */
+      padding: var(--spacing-sm);
+      border-radius: var(--spacing-sm);
+      font-weight: 300;
+      cursor: pointer;
+      transition: all 0.2s;
+      & .formula-title {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        svg.lucide-pin {
+          width: 16px;
+          height: 16px;
+          transform: rotate(45deg);
+          opacity: 0.5;
+        }
+        & .color-icon svg {
+          width: 18px;
+          height: 18px;
+          opacity: 0.8;
+        }
+      }
+      & .formula-meta {
+        font-size: var(--text-smaller);
+        color: var(--text-muted);
+        & .formula-models {
+          display: none;
+        }
+        & .formula-author {
+          display: none;
+        }
+      }
+      &:hover {
+        background-color: var(--bg-card);
+        transform: scale(1.05);
+      }
     }
   }
 }
@@ -85,88 +190,516 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-
 }
-.formula-content{
-    background: var(--bg-input);
-        border-radius: 0 0 5px 5px;
-  }
 
-  #formula-display-area{
+#main-content {
+  padding: var(--spacing-lg);
+}
+.prompt-composer {
+  background-color: var(--bg-card);
+  border-radius: var(--spacing-md);
+  padding: var(--spacing-md);
+}
+.formula-content {
+  background: var(--bg-input);
+  padding: var(--spacing-lg);
+  font-size: var(--text-bigger);
+}
+
+#formula-display-area {
+  &.compose {
     display: inline-flex;
     flex-direction: row;
-    gap:5px;
+    gap: 5px;
     line-height: 1.5em;
     padding: var(--spacing-md);
-    align-items: center;
-    & .formula-text{
-        color: var(--text-muted);
-    }
+    align-items: flex-end;
+    flex-wrap: wrap;
   }
 
-  .action-bar{
-    margin-top: var(--spacing-lg);
+  &.manual,
+  &.edit {
     display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    gap: var(--spacing-md);
-
-    & button{
-        background-color: var(--primary-color);
-        border-radius: 1rem;
-        border:none;
-        display: flex;
-        align-items: center;
-        color: var(--text-primary);
-        padding: var(--spacing-xs) var(--spacing-lg);
-        opacity: .8;
-        cursor: pointer;
-        transition: all .2s;
-        &:hover{
-            opacity: 1;
-            transform: scale(1.05);
-        }
-    }
-  }
-/* 响应式布局 */
-@media (max-width: 768px) {
-  .mobile .layout-main {
     flex-direction: column;
   }
 
-  .mobile .layout-sidebar {
-    width: 100%;
-    height: auto;
-    max-height: 50vh;
+  & .placeholder-text {
+    font-size: var(--text-bigger);
+    font-weight: 300;
+    color: var(--text-secondary);
   }
-
-  .mobile .layout-content {
-    flex: 1;
+  & .formula-text {
+    color: var(--text-secondary);
+    line-height: 1em;
+    padding-bottom: var(--spacing-xs);
+    font-weight: 200;
+  }
+  & .tag-button {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--spacing-md);
+    border: none;
+    background-color: var(--bg-card);
+    color: var(--text-muted);
+    &:hover {
+      background-color: var(--bg-card-hover);
+    }
+    &.state-selected {
+      background-color: var(--bg-dark);
+    }
+    & .tag-snippet-title {
+      line-height: 1em;
+      text-align: left;
+      font-size: var(--text-smaller);
+      color: var(--text-muted);
+    }
+    & .tag-snippet-content {
+      font-size: var(--text-bigger);
+      color: var(--text-primary);
+      line-height: 1em;
+      font-weight: 200;
+    }
+  }
+}
+/* 手动修改模式的文本区域样式 */
+.formula-manual-textarea {
+  padding: var(--spacing-sm);
+  flex: 1;
+  color: var(--text-secondary);
+  font-size: var(--text-bigger);
+  background: none;
+  width: 100%;
+  height: fit-content;
+  min-height: 5em;
+  border: none;
+  &::focus {
+    outline-color: var(--text-muted);
+    color: var(--text-primary);
+    border: none;
   }
 }
 
-/* 组件样式 */
-.tab-container{
+.formula-edit-container .form-box {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  & .form-line {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+  & .left-part {
+    display: flex;
+    flex: 3;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+  & .right-part {
+    display: flex;
+    flex: 1;
+    & .form-line {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--spacing-md);
+    }
+  }
+  & .form-label {
+    display: inline;
+    font-size: var(--text-smaller);
+    min-width: 6em;
+    font-weight: 200;
+    color: var(--primary-color);
+  }
+
+  & .form-input,
+  & .form-textarea,
+  & .form-select {
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--spacing-xs);
+    border: 1px solid var(--text-muted);
+    background-color: var(--bg-input);
+    color: var(--text-primary);
+  }
+
+  & .form-textarea {
+    width: 100%;
+    min-height: 100px;
+    resize: vertical;
+  }
+  & .form-select {
+    height: auto;
+    width: 100%;
+    min-height: 100px;
+  }
+}
+
+.action-bar,
+.form-action-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--spacing-md);
+  background-color: var(--bg-input);
+  border-radius: 0 0 5px 5px;
+  &.action-bar {
+    padding: 0 var(--spacing-md) var(--spacing-md) 0;
+  }
+  &.form-action-bar {
+    padding-top: var(--spacing-md);
+  }
+  & button {
+    background-color: var(--primary-color);
+    border-radius: 1rem;
+    border: none;
+    display: flex;
+    font-size: var(--text-bigger);
+    align-items: center;
+    color: var(--bg-dark);
+    padding: var(--spacing-xs) var(--spacing-lg);
+    opacity: 0.8;
+    cursor: pointer;
+    transition: all 0.2s;
+    &.btn-secondary {
+      background-color: var(--bg-card);
+    }
+    &:hover {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+  }
+}
+
+.status-indicator {
+  display: none;
+  padding: var(--spacing-sm);
+  background-color: var(--success-color);
+  padding: var(--spacing-xs) var(--spacing-lg);
+  position: relative;
+  border-radius: var(--spacing-sm);
+  &::after {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%) translateX(100%);
+    content: "";
+    border: 0.5rem solid transparent;
+    border-width: 0.5rem 0 0.5rem 0.8rem;
+    border-left-color: var(--success-color);
+
+    width: 1rem;
+    height: 0;
+  }
+}
+
+.snippet-panel {
+  margin-top: var(--spacing-xl);
+  overflow-y: auto;
+  scrollbar-width: var(--spacing-xs);
+  &::-webkit-scrollbar {
+    width: var(--spacing-xs);
+    background-color: var(--bg-dark);
+  }
+  & .panel-header {
+    width: 100%;
     display: flex;
     flex-direction: row;
-    width: 100%;
-    & button{
-        flex:0;
-        word-break: keep-all;
-        border: none;
-        padding: var(--spacing-xs) var(--spacing-lg);
-        background-color: transparent;
-        color: var(--text-muted);
-        &.active{
-        background: var(--bg-input);
-        color: var(--text-primary);
-        border-radius: 5px 5px 0 0;
-        }
+    align-items: center;
+    justify-content: space-between;
+    & .panel-title {
+      flex: 1;
+      padding: var(--spacing-sm);
+      font-weight: 200;
+      font-size: var(--text-bigger);
     }
-        & .spacer{
-            flex:1;
-            width:100%;
+    & #btn-add-snippet {
+      border-radius: 1rem;
+      cursor: pointer;
+      background: var(--bg-card);
+      border: none;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      padding: var(--spacing-xs) var(--spacing-lg);
+      transition: all 0.2s;
+      &:hover {
+        transform: scale(1.05);
+      }
+      & i {
+        color: var(--primary-color) !important;
+      }
+    }
+  }
+}
+
+.snippet-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 0.5fr));
+  gap: var(--spacing-md);
+  & .snippet-card {
+    display: flex;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s;
+    min-height: 100px;
+    background-color: var(--bg-card);
+    border-radius: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    flex-direction: column;
+    &:hover {
+      transform: scale(1.05);
+    }
+    & .color-icon {
+      position: absolute;
+      right: var(--spacing-md);
+      top: var(--spacing-md);
+      opacity: 0.7;
+    }
+    & .snippet-title {
+      font-size: var(--text-bigger);
+      color: var(--text-primary);
+    }
+    & .snippet-content {
+      font-size: var(--text-smaller);
+      color: var(--text-secondary);
+    }
+  }
+}
+
+.color-icon {
+  color: var(--primary-color);
+}
+
+.modal-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  & .modal-content {
+    padding: var(--spacing-lg);
+    background-color: var(--bg-card);
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--spacing-md);
+    gap: var(--spacing-md);
+    max-height: 90vh;
+    & .modal-header {
+      font-size: var(--text-bigger);
+      font-weight: 300;
+      display: flex;
+      justify-content: space-between;
+      & .btn-icon {
+        color: var(--error-color);
+      }
+    }
+    & .modal-body {
+      height: auto;
+      overflow-y: auto;
+      padding: var(--spacing-sm);
+    }
+    & .form-label {
+      color: var(--primary-color);
+    }
+    & span {
+      font-size: var(--text-smaller);
+      color: var(--text-muted);
+    }
+    & .modal-footer {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      align-items: center;
+      & button {
+        font-size: var(--text-bigger);
+        padding: var(--spacing-xs) var(--spacing-md);
+        border-radius: var(--spacing-xl);
+        border: none;
+        background: none;
+        &.btn-primary {
+          background-color: var(--primary-color);
+          color: var(--bg-dark);
         }
+        &.btn-secondary {
+          background-color: var(--bg-dark);
+          color: var(--text-secondary);
+        }
+      }
+    }
+    #add-snippet-form {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-md);
+      & #btn-add-snippet-item {
+        background-color: var(--bg-dark);
+        padding: var(--spacing-xs) var(--spacing-md);
+        border-radius: var(--spacing-sm);
+        border: none;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+      }
+
+      & .snippet-item-form {
+        position: relative;
+        padding-top: var(--spacing-md);
+        margin-top: var(--spacing-sm);
+        border-top: 1px solid var(--bg-dark);
+        & input {
+          width: 400px;
+        }
+        & textarea {
+          background-color: var(--bg-input);
+          border: none;
+          padding: var(--spacing-md);
+          margin-top: var(--spacing-xs);
+          width: 100%;
+          color: var(--text-primary);
+          border-radius: var(--spacing-sm);
+        }
+        & .btn-remove-snippet {
+          position: absolute;
+          top: var(--spacing-sm);
+          right: var(--spacing-md);
+          background: none;
+          border: none;
+          color: var(--error-color);
+        }
+
+        &:first-child {
+          padding-top: 0;
+          border-top: none;
+        }
+      }
+    }
+  }
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+  :root {
+    --text-bigger: 1rem;
+
+    --spacing-xs: 2px;
+    --spacing-sm: 5px;
+    --spacing-md: 10px;
+    --spacing-lg: 12px;
+    --spacing-xl: 15px;
+  }
+  body {
+    font-size: 12px;
+  }
+  .layout-main {
+    flex-direction: column;
+  }
+  #app-header {
+    & .app-logo {
+      width: 32px;
+      height: 32px;
+    }
+  }
+  #app-title {
+    display: none;
+  }
+  #formula-display-area {
+    &.compose {
+      max-height: 20vh;
+      overflow-y: auto;
+      scrollbar-width: var(--spacing-xs);
+      &::-webkit-scrollbar {
+        width: var(--spacing-xs);
+        background-color: var(--bg-dark);
+      }
+    }
+  }
+  .snippet-list {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 0.5fr));
+  }
+  .sidebar {
+    width: 100%;
+    height: auto;
+    max-height: 15vh;
+    min-height: 40px;
+  }
+
+  .sidebar-search {
+    width: 100%;
+  }
+  .formula-list {
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    & .formula-description {
+      display: none;
+    }
+  }
+  .layout-content {
+    flex: 1;
+  }
+
+
+  .modal-overlay {
+    & .modal-content {
+      max-width: 100%;
+      height: 100%;
+      max-height: 100%;
+    }
+  }
+  }
+.modal-overlay {
+    & .modal-content {
+        & #add-snippet-form {
+            & .snippet-item-form {
+                & input {
+                  max-width: 80%;
+                }
+              }
+            }
+          }
+}
+
+/* 组件样式 */
+.tab-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  & button {
+    flex: 0;
+    display: flex;
+    align-items: center;
+    word-break: keep-all;
+    border: none;
+    padding: var(--spacing-xs) var(--spacing-lg);
+    background-color: transparent;
+    color: var(--text-muted);
+    font-size: var(--text-bigger);
+    font-weight: 200;
+    & svg {
+      width: 18px;
+      height: 18px;
+    }
+    &.state-active {
+      background: var(--bg-input);
+      color: var(--text-primary);
+      border-radius: 5px 5px 0 0;
+      & svg {
+        width: 24px;
+        height: 24px;
+        color: var(--primary-color);
+      }
+    }
+  }
+  & .spacer {
+    flex: 1;
+    width: 100%;
+  }
 }
 .card {
   background: var(--bg-card);
@@ -174,12 +707,12 @@ body {
   padding: var(--spacing-md);
   margin-top: var(--spacing-md);
 }
-.icon {
+.btn-icon {
   background: none;
   border: none;
   min-width: 24px;
   min-height: 24px;
-  color:var(--primary-color)
+  color: var(--primary-color);
 }
 .button {
   background: var(--primary-color);
@@ -330,84 +863,24 @@ body {
   color: var(--primary-color);
 }
 
-
-/* 手动修改模式的文本区域样式 */
-.formula-manual-textarea {
-    width: 100%;
-    min-height: 150px;
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #555;
-    background-color: #333;
-    color: white;
-    font-family: inherit;
-    font-size: inherit;
-    resize: vertical;
-}
-
-/* 编辑公式模式的表单样式 */
-.formula-edit-container {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    padding: 15px;
-    background: #2a2a2a;
-    border-radius: 5px;
-}
-
-.formula-edit-container .form-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #00aabb;
-}
-
-.formula-edit-container .form-input,
-.formula-edit-container .form-textarea,
-.formula-edit-container .form-select {
-    width: 100%;
-    padding: 8px 10px;
-    border-radius: 4px;
-    border: 1px solid #555;
-    background-color: #333;
-    color: white;
-}
-
-.formula-edit-container .form-textarea {
-    min-height: 100px;
-    resize: vertical;
-}
-
-.formula-edit-container .form-select {
-    height: auto;
-    min-height: 100px;
-}
-
-.formula-edit-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-}
-
 /* 提示消息样式 */
 .toast-message {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 12px 20px;
-    border-radius: 4px;
-    color: white;
-    font-weight: bold;
-    z-index: 1000;
-    opacity: 1;
-    transition: opacity 0.3s ease;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  border-radius: 4px;
+  color: white;
+  font-weight: bold;
+  z-index: 1000;
+  opacity: 1;
+  transition: opacity 0.3s ease;
 }
 
 .toast-message.success {
-    background-color: #28a745;
+  background-color: #28a745;
 }
 
 .toast-message.error {
-    background-color: #dc3545;
+  background-color: #dc3545;
 }

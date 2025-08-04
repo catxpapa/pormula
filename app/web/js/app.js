@@ -10,7 +10,7 @@ import { MiniDB } from "@lazycatcloud/minidb";
  * 调试配置
  * 设置为 true 启用调试输出，false 关闭调试
  */
-const DEBUG_MODE = true;
+const DEBUG_MODE = false;
 
 /**
  * 调试日志输出函数
@@ -70,7 +70,7 @@ class AISpellbookApp {
   async init() {
     try {
       debugLog("开始应用初始化流程");
-
+      
       // 缓存DOM元素
       this.cacheElements();
 
@@ -94,7 +94,7 @@ class AISpellbookApp {
             await this.showDevToolsMenu()
         }
 
-        
+        this.updateEditFormulaButtonState();
 
     } catch (error) {
       console.error("应用初始化失败:", error);
@@ -136,6 +136,7 @@ class AISpellbookApp {
       "modal-close-btn",
       "add-snippet-form",
       "snippet-tags-input",
+      "action-bar",
       "snippet-items-container",
       "btn-add-snippet-item",
       "btn-cancel-snippet",
@@ -285,6 +286,8 @@ async loadInitialData() {
         // 如果已有设置数据，检查版本号决定是否需要更新
         if (existingSettings) {
             debugLog('发现现有设置数据，检查版本');
+            
+            this.showSuccess('欢迎回来，应用正在初始化...');
             let currentSettings;
             try {
                 currentSettings = JSON.parse(existingSettings.settingValue);
@@ -313,6 +316,7 @@ async loadInitialData() {
         } else {
             // 首次初始化，执行完整导入
             debugLog('首次初始化，导入所有初始数据');
+            this.showSuccess('首次打开应用，正在初始化数据，请稍候...');
             const response = await fetch('/api/init-data');
             const result = await response.json();
             
@@ -412,31 +416,7 @@ async importInitialData(initData) {
         throw error;
     }
 }
-/**
- * 初始化开发工具
- */
-initDevTools() {
-    if (DEBUG_MODE) {
-        debugLog('初始化开发工具');
-        
-        // 创建开发工具按钮
-        const devToolsBtn = document.createElement('button');
-        devToolsBtn.textContent = '🛠️ 开发工具';
-        devToolsBtn.style.position = 'fixed';
-        devToolsBtn.style.bottom = '10px';
-        devToolsBtn.style.right = '10px';
-        devToolsBtn.style.zIndex = '9999';
-        devToolsBtn.style.padding = '8px 15px';
-        devToolsBtn.style.background = '#00aabb';
-        devToolsBtn.style.color = 'white';
-        devToolsBtn.style.border = 'none';
-        devToolsBtn.style.borderRadius = '4px';
-        devToolsBtn.style.cursor = 'pointer';
-        
-        devToolsBtn.onclick = () => this.showDevToolsMenu();
-        document.body.appendChild(devToolsBtn);
-    }
-}
+
 
 /**
  * 显示开发工具菜单
@@ -707,15 +687,20 @@ async updateInitialData(initData) {
 
       // 应用模型过滤
       if (modelFilter) {
-        query.modelIds = { $in: [modelFilter] };
+        query.modelIds = { $eq: [modelFilter] };
+        // query.$or=[{modelIds :{ $elemMatch: { $eq: modelFilter}}}];
+        
+        // query.modelIds = { $like: `[${modelFilter}]` };
       }
-
+      console.log('过滤模形请求',query);
       // 获取公式数据
       let formulas = await this.collections.formulas
         .find(query, {
-          sort: ["isTop", "updatedAt"],
+          sort: [["isTop","desc"], ["updatedAt","desc"]],
         })
         .fetch();
+
+        console.log(formulas);
 
       // 应用搜索过滤
       if (searchQuery) {
@@ -764,9 +749,9 @@ async updateInitialData(initData) {
     const element = document.createElement("div");
     element.className = "formula-item";
     element.dataset.formulaId = formula.formulaId;
-
+    const icon='<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scroll-text-icon lucide-scroll-text"><path d="M15 12h-5"/><path d="M15 8h-5"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3"/></svg>';
     // 置顶标记
-    const topBadge = formula.isTop ? '<span class="badge-top">置顶</span>' : "";
+    const topBadge = formula.isTop ? '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pin-icon lucide-pin"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>' : "";
 
     // 模型标签
     const modelBadges = formula.modelIds
@@ -776,7 +761,8 @@ async updateInitialData(initData) {
       : "";
 
     element.innerHTML = `
-            <div class="formula-title">${formula.title} ${topBadge}</div>
+           
+            <div class="formula-title"> <b class="color-icon">${icon}</b>${formula.title} ${topBadge}</div>
             <div class="formula-meta">
                 <div class="formula-models">${modelBadges}</div>
                 <div class="formula-description">${
@@ -799,45 +785,39 @@ async updateInitialData(initData) {
    * 选择公式
    * @param {Object} formula - 选中的公式对象
    */
-  async selectFormula(formula) {
+/**
+ * 选择公式
+ * @param {Object} formula - 公式对象
+ */
+selectFormula(formula) {
     try {
-      debugLog("选择公式", formula);
-
-      // 更新状态
-      this.state.currentFormula = formula;
-      this.state.selectedSnippets.clear();
-
-      // 更新UI选中状态
-      document.querySelectorAll(".formula-item").forEach((item) => {
-        item.classList.remove("formula-active");
-      });
-
-      const selectedElement = document.querySelector(
-        `[data-formula-id="${formula.formulaId}"]`
-      );
-      if (selectedElement) {
-        selectedElement.classList.add("formula-active");
-      }
-
-      // 渲染公式显示区
-      await this.renderFormulaDisplay('compose');
-
-      // 清空片段面板
-      this.clearSnippetPanel();
-
-      // 启用复制按钮
-      this.elements["btn-copy"].disabled = false;
-
-      // 更新状态
-      this.updateStatusDisplay("公式已选择");
-
-      debugLog("公式选择完成");
+        debugLog('选择公式', formula);
+        
+        this.state.currentFormula = formula;
+        
+        // 渲染公式显示区
+        this.renderFormulaDisplay(this.state.currentMode);
+        
+        // 清空片段面板
+        this.clearSnippetPanel();
+        
+        // 清空已选择的片段
+        this.state.selectedSnippets = new Map();
+        
+        // 更新状态显示
+        this.updateStatusDisplay('公式已选择');
+        
+        // 更新修改公式按钮状态
+        this.updateEditFormulaButtonState();
+        
+        debugLog('公式选择完成');
+        
     } catch (error) {
-      console.error("选择公式失败:", error);
-      this.showError("选择公式失败");
+        console.error('选择公式失败:', error);
+        debugLog('公式选择错误', error);
+        this.showError('加载公式失败');
     }
-  }
-
+}
 /**
  * 渲染公式显示区
  * @param {string} mode - 当前模式: compose/manual/edit
@@ -847,14 +827,21 @@ renderFormulaDisplay(mode) {
         debugLog('开始渲染公式显示区', mode);
         
         const displayArea = this.elements['formula-display-area'];
+
+        displayArea.classList.remove('edit');
+        displayArea.classList.remove('manual');
+        displayArea.classList.remove('compose');
+        
+        displayArea.classList.add(mode);
+
         if (!displayArea) return;
         
         // 清空显示区
         displayArea.innerHTML = '';
         
         // 如果没有选中的公式，显示提示信息
-        if (!this.state.currentFormula) {
-            displayArea.innerHTML = '<p class="placeholder-text">请从左侧选择一个公式开始</p>';
+        if (!this.state.currentFormula && mode != 'edit') {
+            displayArea.innerHTML = '<p class="placeholder-text">1.请从选择一个公式开始</p>';
             return;
         }
         console.log(mode)
@@ -955,37 +942,234 @@ renderFormulaDisplay(mode) {
     return parts;
   }
 
-  /**
-   * 创建标签按钮
-   * @param {Object} tagPart - 标签部分数据
-   * @returns {HTMLElement} 标签按钮元素
-   */
-  createTagButton(tagPart) {
-    debugLog("创建标签按钮", tagPart);
-
-    const button = document.createElement("button");
-    button.className = "tag-button";
-    button.dataset.tagSlug = tagPart.slug;
-
-    // 检查是否已选择片段
-    const selectedSnippet = this.state.selectedSnippets.get(tagPart.slug);
-    if (selectedSnippet) {
-      button.textContent = selectedSnippet.shortName;
-      button.classList.add("tag-selected");
-    } else {
-      button.textContent = `#${tagPart.displayName}`;
-      button.classList.add("tag-placeholder");
+/**
+ * 处理标签按钮点击事件
+ * 负责协调标签选择和片段显示流程
+ * @param {Object} tagInfo - 标签信息对象
+ */
+async handleTagButtonClick(tagInfo) {
+    try {
+        debugLog('标签按钮点击', tagInfo.slug);
+        
+        // 检查是否为标签对象，如果是直接传递
+        if (tagInfo.tag) {
+            await this.selectTag(tagInfo);
+        } else {
+            // 构建完整的标签对象并传递
+            const tag = await this.collections.tags.findOne({ 
+                $or: [
+                    { tagId: tagInfo.slug },
+                    { slug: tagInfo.slug }
+                ]
+            });
+            
+            if (tag) {
+                await this.selectTag({
+                    type: 'tag',
+                    slug: tag.slug || tag.tagId,
+                    displayName: tag.displayName,
+                    tag: tag
+                });
+            } else {
+                this.showError(`未找到标签: ${tagInfo.slug}`);
+            }
+        }
+    } catch (error) {
+        console.error('处理标签按钮点击失败:', error);
+        debugLog('标签按钮点击错误', error);
+        this.showError('加载标签内容失败');
     }
+}
 
-    // 绑定点击事件
-    button.addEventListener("click", () => {
-      debugLog("标签按钮点击", tagPart.slug);
-      this.selectTag(tagPart);
-    });
+/**
+ * 创建片段卡片元素
+ * @param {Object} snippet - 片段对象
+ * @returns {HTMLElement} 片段卡片元素
+ */
+createSnippetElement(snippet) {
+    try {
+        const snippetCard = document.createElement('div');
+        snippetCard.className = 'snippet-card';
+        snippetCard.setAttribute('data-id', snippet.snippetId);
+        
+        // 创建片段标题
+        const titleElement = document.createElement('div');
+        titleElement.className = 'snippet-title';
+        titleElement.textContent = snippet.shortName;
+        
+        // 创建片段内容
+        const contentElement = document.createElement('div');
+        contentElement.className = 'snippet-content';
+        contentElement.textContent = snippet.content;
+        
+        //添加图标
+        const iconContainer = document.createElement('b');
+        iconContainer.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-puzzle-icon lucide-puzzle"><path d="M15.39 4.39a1 1 0 0 0 1.68-.474 2.5 2.5 0 1 1 3.014 3.015 1 1 0 0 0-.474 1.68l1.683 1.682a2.414 2.414 0 0 1 0 3.414L19.61 15.39a1 1 0 0 1-1.68-.474 2.5 2.5 0 1 0-3.014 3.015 1 1 0 0 1 .474 1.68l-1.683 1.682a2.414 2.414 0 0 1-3.414 0L8.61 19.61a1 1 0 0 0-1.68.474 2.5 2.5 0 1 1-3.014-3.015 1 1 0 0 0 .474-1.68l-1.683-1.682a2.414 2.414 0 0 1 0-3.414L4.39 8.61a1 1 0 0 1 1.68.474 2.5 2.5 0 1 0 3.014-3.015 1 1 0 0 1-.474-1.68l1.683-1.682a2.414 2.414 0 0 1 3.414 0z"/></svg>';
 
-    return button;
-  }
+        iconContainer.classList.add('color-icon');
+        snippetCard.appendChild(iconContainer)
 
+        // 添加到卡片
+        snippetCard.appendChild(titleElement);
+        snippetCard.appendChild(contentElement);
+        
+        // 添加点击事件 - 选中片段时更新标签按钮
+        snippetCard.addEventListener('click', () => {
+            if (this.state.currentTag) {
+                this.handleSnippetSelect(snippet, this.state.currentTag.slug);
+            }
+        });
+        
+        return snippetCard;
+        
+    } catch (error) {
+        console.error('创建片段卡片失败:', error);
+        debugLog('片段卡片创建错误', error);
+        
+        // 创建一个错误状态的卡片
+        const errorCard = document.createElement('div');
+        errorCard.className = 'snippet-card state-error';
+        errorCard.textContent = '片段加载失败';
+        return errorCard;
+    }
+}
+
+
+/**
+ * 处理片段选择
+ * @param {Object} snippet - 片段对象
+ * @param {string} tagSlug - 标签标识符
+ */
+handleSnippetSelect(snippet, tagSlug) {
+    try {
+        debugLog('选择片段', { snippet, tagSlug });
+        
+        // 存储已选择的片段
+        this.state.selectedSnippets.set(tagSlug, snippet);
+        
+        // 更新标签按钮显示
+        this.updateTagButtonDisplay(tagSlug, snippet);
+        
+        // 【新增】重新渲染整个公式显示区，确保UI立即更新
+        // this.renderFormulaDisplay(this.state.currentMode);
+       
+        // 更新状态显示
+        this.updateStatusDisplay('已选择片段');
+        
+        // 启用复制按钮
+        if (this.elements['btn-copy']) {
+            this.elements['btn-copy'].disabled = false;
+        }
+        
+        debugLog('片段选择完成');
+        
+    } catch (error) {
+        console.error('选择片段失败:', error);
+        debugLog('片段选择错误', error);
+        this.showError('选择片段失败');
+    }
+}
+
+
+/**
+ * 更新标签按钮显示
+ * 根据选中的片段更新对应标签按钮的显示内容
+ * @param {string} tagSlug - 标签标识符
+ * @param {Object} snippet - 片段对象
+ */
+updateTagButtonDisplay(tagSlug, snippet) {
+    try {
+        // 找到对应的标签按钮
+        const tagButton = document.querySelector(`.tag-button[data-tag="${tagSlug}"]`);
+        if (!tagButton){
+            debugLog('未在渲染区找到标签！')
+            return;
+        } else{
+            console.log(tagButton)
+        }
+        
+        // 清空按钮内容
+        tagButton.innerHTML = '';
+        
+        // 创建短标题元素
+        const shortTitleSpan = document.createElement('span');
+        shortTitleSpan.className = 'tag-snippet-title';
+        shortTitleSpan.textContent = snippet.shortName;
+        
+        // 创建正文元素
+        const contentSpan = document.createElement('span');
+        contentSpan.className = 'tag-snippet-content';
+        contentSpan.textContent = snippet.content;
+        
+        // 添加到按钮
+        tagButton.appendChild(shortTitleSpan);
+        tagButton.appendChild(contentSpan);
+        
+        // 添加选中状态样式
+        tagButton.classList.add('state-selected');
+        tagButton.classList.remove('tag-placeholder');
+
+        // 【新增】重新渲染整个公式显示区，确保UI立即更新
+        // this.renderFormulaDisplay(this.state.currentMode);
+
+    } catch (error) {
+        console.error('更新标签按钮显示失败:', error);
+        debugLog('标签按钮更新错误', error);
+    }
+}
+/**
+ * 创建标签按钮
+ * @param {Object} tagInfo - 标签信息对象
+ * @returns {HTMLElement} 标签按钮元素
+ */
+createTagButton(tagInfo) {
+    try {
+        debugLog('创建标签按钮', tagInfo);
+        
+        const tagButton = document.createElement('button');
+        tagButton.className = 'tag-button';
+        tagButton.setAttribute('data-tag', tagInfo.slug);
+        
+        // 检查是否已选择该标签的片段
+        const selectedSnippet = this.state.selectedSnippets.get(tagInfo.slug);
+        
+        if (selectedSnippet) {
+            // 已选择片段，显示片段的短标题和正文
+            const shortTitleSpan = document.createElement('span');
+            shortTitleSpan.className = 'tag-snippet-title';
+            shortTitleSpan.textContent = selectedSnippet.shortName;
+            
+            const contentSpan = document.createElement('span');
+            contentSpan.className = 'tag-snippet-content';
+            contentSpan.textContent = selectedSnippet.content;
+            
+            tagButton.appendChild(shortTitleSpan);
+            tagButton.appendChild(contentSpan);
+            tagButton.classList.add('state-selected');
+        } else {
+            // 未选择片段，显示标签名
+            tagButton.textContent = `#${tagInfo.displayName}`;
+            tagButton.classList.add('tag-placeholder');
+        }
+        
+        // 添加点击事件
+        tagButton.addEventListener('click', () => {
+            this.handleTagButtonClick(tagInfo);
+        });
+        
+        return tagButton;
+        
+    } catch (error) {
+        console.error('创建标签按钮失败:', error);
+        debugLog('标签按钮创建错误', error);
+        
+        // 创建一个错误状态的按钮
+        const errorButton = document.createElement('button');
+        errorButton.className = 'tag-button state-error';
+        errorButton.textContent = `#${tagInfo.displayName || '未知标签'}`;
+        return errorButton;
+    }
+}
   /**
    * 选择标签
    * @param {Object} tagPart - 标签数据
@@ -1110,74 +1294,74 @@ async renderSnippetList(tag) {
    * @param {Object} snippet - 片段数据对象
    * @returns {HTMLElement} 片段元素
    */
-  createSnippetElement(snippet) {
-    debugLog("创建片段元素", snippet.snippetId);
+//   createSnippetElement(snippet) {
+//     debugLog("创建片段元素", snippet.snippetId);
 
-    const element = document.createElement("div");
-    element.className = "snippet-card";
-    element.dataset.snippetId = snippet.snippetId;
+//     const element = document.createElement("div");
+//     element.className = "snippet-card";
+//     element.dataset.snippetId = snippet.snippetId;
 
-    // 置顶标记
-    const topBadge = snippet.isTop ? '<span class="badge-top">置顶</span>' : "";
+//     // 置顶标记
+//     const topBadge = snippet.isTop ? '<span class="badge-top">置顶</span>' : "";
 
-    element.innerHTML = `
-            <div class="snippet-title">${snippet.shortName} ${topBadge}</div>
-            <div class="snippet-content">${snippet.content}</div>
-        `;
+//     element.innerHTML = `
+//             <div class="snippet-title">${snippet.shortName} ${topBadge}</div>
+//             <div class="snippet-content">${snippet.content}</div>
+//         `;
 
-    // 绑定点击事件
-    element.addEventListener("click", () => {
-      debugLog("片段卡片点击", snippet.snippetId);
-      this.selectSnippet(snippet);
-    });
+//     // 绑定点击事件
+//     element.addEventListener("click", () => {
+//       debugLog("片段卡片点击", snippet.snippetId);
+//       this.selectSnippet(snippet);
+//     });
 
-    return element;
-  }
+//     return element;
+//   }
 
   /**
    * 选择片段
    * @param {Object} snippet - 选中的片段对象
    */
-  selectSnippet(snippet) {
-    try {
-      debugLog("选择片段", snippet);
+//   selectSnippet(snippet) {
+//     try {
+//       debugLog("选择片段", snippet);
 
-      if (!this.state.currentTag) return;
+//       if (!this.state.currentTag) return;
 
-      // 保存选择的片段
-      this.state.selectedSnippets.set(this.state.currentTag.slug, snippet);
+//       // 保存选择的片段
+//       this.state.selectedSnippets.set(this.state.currentTag.slug, snippet);
 
-      // 更新标签按钮显示
-      const tagButton = document.querySelector(
-        `[data-tag-slug="${this.state.currentTag.slug}"]`
-      );
-      if (tagButton) {
-        tagButton.textContent = snippet.shortName;
-        tagButton.classList.remove("tag-placeholder");
-        tagButton.classList.add("tag-selected");
-      }
+//       // 更新标签按钮显示
+//       const tagButton = document.querySelector(
+//         `[data-tag-slug="${this.state.currentTag.slug}"]`
+//       );
+//       if (tagButton) {
+//         tagButton.textContent = snippet.shortName;
+//         tagButton.classList.remove("tag-placeholder");
+//         tagButton.classList.add("tag-selected");
+//       }
 
-      // 更新片段卡片选中状态
-      document.querySelectorAll(".snippet-card").forEach((card) => {
-        card.classList.remove("snippet-selected");
-      });
+//       // 更新片段卡片选中状态
+//       document.querySelectorAll(".snippet-card").forEach((card) => {
+//         card.classList.remove("snippet-selected");
+//       });
 
-      const selectedCard = document.querySelector(
-        `[data-snippet-id="${snippet.snippetId}"]`
-      );
-      if (selectedCard) {
-        selectedCard.classList.add("snippet-selected");
-      }
+//       const selectedCard = document.querySelector(
+//         `[data-snippet-id="${snippet.snippetId}"]`
+//       );
+//       if (selectedCard) {
+//         selectedCard.classList.add("snippet-selected");
+//       }
 
-      // 更新状态
-      this.updateStatusDisplay("片段已选择");
+//       // 更新状态
+//       this.updateStatusDisplay("片段已选择");
 
-      debugLog("片段选择完成");
-    } catch (error) {
-      console.error("选择片段失败:", error);
-      this.showError("选择片段失败");
-    }
-  }
+//       debugLog("片段选择完成");
+//     } catch (error) {
+//       console.error("选择片段失败:", error);
+//       this.showError("选择片段失败");
+//     }
+//   }
 
 /**
  * 切换应用模式
@@ -1202,32 +1386,43 @@ switchMode(mode) {
         
         if (tabCompose) tabCompose.classList.remove('state-active');
         if (tabManual) tabManual.classList.remove('state-active');
+        if (btnEditFormula) btnEditFormula.classList.remove('state-active');
         
-        if (mode === 'compose' && tabCompose) {
-            tabCompose.classList.add('state-active');
+        if (mode === 'edit' && btnEditFormula) {
+            btnEditFormula.classList.add('state-active');
+
         } else if (mode === 'manual' && tabManual) {
             tabManual.classList.add('state-active');
+        }else{
+            tabCompose.classList.add('state-active');
         }
         
+
+
+
         // 编辑模式特殊处理
         if (mode === 'edit') {
-            if (btnEditFormula) btnEditFormula.style.display = 'none';
+            // if (btnEditFormula) btnEditFormula.style.display = 'none';
             // 在编辑模式中隐藏复制和提交按钮
-            if (this.elements['btn-copy']) this.elements['btn-copy'].style.display = 'none';
-            if (this.elements['btn-submit']) this.elements['btn-submit'].style.display = 'none';
+            // if (this.elements['btn-copy']) this.elements['btn-copy'].style.display = 'none';
+            // if (this.elements['btn-submit']) this.elements['btn-submit'].style.display = 'none';
+            if (this.elements['action-bar']) this.elements['action-bar'].style.display = 'none';
+            // if (this.elements['form-action-bar']) this.elements['form-action-bar'].style.display = 'flex';
             
             // 显示保存和取消按钮 (如果这些元素存在)
-            if (this.elements['btn-save-formula']) this.elements['btn-save-formula'].style.display = 'inline-block';
-            if (this.elements['btn-cancel-edit']) this.elements['btn-cancel-edit'].style.display = 'inline-block';
+            // if (this.elements['btn-save-formula']) this.elements['btn-save-formula'].style.display = 'inline-block';
+            // if (this.elements['btn-cancel-edit']) this.elements['btn-cancel-edit'].style.display = 'inline-block';
         } else {
-            if (btnEditFormula) btnEditFormula.style.display = 'inline-block';
+            // if (btnEditFormula) btnEditFormula.style.display = 'inline-block';
             // 在非编辑模式中显示复制按钮
-            if (this.elements['btn-copy']) this.elements['btn-copy'].style.display = 'inline-block';
-            if (this.elements['btn-submit']) this.elements['btn-submit'].style.display = 'inline-block';
+            // if (this.elements['btn-copy']) this.elements['btn-copy'].style.display = 'inline-block';
+            // if (this.elements['btn-submit']) this.elements['btn-submit'].style.display = 'inline-block';
+            if (this.elements['action-bar']) this.elements['action-bar'].style.display = 'flex';
+            // if (this.elements['form-action-bar']) this.elements['form-action-bar'].style.display = 'none';
             
             // 隐藏保存和取消按钮 (如果这些元素存在)
-            if (this.elements['btn-save-formula']) this.elements['btn-save-formula'].style.display = 'none';
-            if (this.elements['btn-cancel-edit']) this.elements['btn-cancel-edit'].style.display = 'none';
+            // if (this.elements['btn-save-formula']) this.elements['btn-save-formula'].style.display = 'none';
+            // if (this.elements['btn-cancel-edit']) this.elements['btn-cancel-edit'].style.display = 'none';
         }
         
         // 渲染公式显示区
@@ -1313,60 +1508,73 @@ showSuccess(message) {
   /**
    * 复制提示词到剪贴板
    */
-  async copyPrompt() {
+/**
+ * 复制提示词到剪贴板
+ */
+copyPrompt() {
     try {
-      debugLog("开始复制提示词");
-
-      const prompt = this.generateFinalPrompt();
-
-      if (!prompt) {
-        this.showError("没有可复制的内容");
-        return;
-      }
-
-      // 检查未完成的标签
-      const incompleteTags = this.getIncompleteTags();
-      if (incompleteTags.length > 0) {
-        this.showWarning(
-          `提示：还有 ${incompleteTags.length} 个标签未选择片段`
-        );
-      }
-
-      // 复制到剪贴板
-      await navigator.clipboard.writeText(prompt);
-
-      this.showSuccess("提示词已复制到剪贴板");
-      this.updateStatusDisplay("已复制");
-
-      debugLog("提示词复制完成", prompt);
+        debugLog('复制按钮点击');
+        
+        let promptText = '';
+        
+        // 根据当前模式获取提示词内容
+        if (this.state.currentMode === 'manual') {
+            // 从手动编辑的文本区域获取最新内容
+            const textArea = document.querySelector('.formula-manual-textarea');
+            if (textArea) {
+                promptText = textArea.value;
+            } else {
+                promptText = this.state.manualEditContent || this.getComposedPrompt();
+            }
+        } else {
+            // 组合模式或其他模式，使用合成的提示词
+            promptText = this.getComposedPrompt();
+        }
+        
+        if (!promptText) {
+            this.showWarning('没有可复制的内容');
+            return;
+        }
+        
+        // 复制到剪贴板
+        navigator.clipboard.writeText(promptText)
+            .then(() => {
+                this.showSuccess('提示词已复制到剪贴板');
+                debugLog('提示词复制成功', promptText);
+            })
+            .catch(error => {
+                console.error('复制到剪贴板失败:', error);
+                this.showError('复制失败，请手动复制');
+            });
+        
     } catch (error) {
-      console.error("复制提示词失败:", error);
-      this.showError("复制失败，请手动选择文本复制");
+        console.error('复制提示词失败:', error);
+        debugLog('提示词复制错误', error);
+        this.showError('复制提示词时发生错误');
     }
-  }
-
+}
   /**
    * 生成最终提示词
    * @returns {string} 完整的提示词文本
    */
-  generateFinalPrompt() {
-    debugLog("生成最终提示词");
+//   generateFinalPrompt() {
+//     debugLog("生成最终提示词");
 
-    if (!this.state.currentFormula) {
-      return "";
-    }
+//     if (!this.state.currentFormula) {
+//       return "";
+//     }
 
-    let prompt = this.state.currentFormula.content;
+//     let prompt = this.state.currentFormula.content;
 
-    // 替换标签为选中的片段内容
-    this.state.selectedSnippets.forEach((snippet, tagSlug) => {
-      const tagPattern = new RegExp(`#\\{${tagSlug}\\}`, "g");
-      prompt = prompt.replace(tagPattern, snippet.content);
-    });
+//     // 替换标签为选中的片段内容
+//     this.state.selectedSnippets.forEach((snippet, tagSlug) => {
+//       const tagPattern = new RegExp(`#\\{${tagSlug}\\}`, "g");
+//       prompt = prompt.replace(tagPattern, snippet.content);
+//     });
 
-    debugLog("最终提示词生成完成", prompt);
-    return prompt;
-  }
+//     debugLog("最终提示词生成完成", prompt);
+//     return prompt;
+//   }
 
   /**
    * 获取未完成的标签列表
@@ -1400,7 +1608,7 @@ showSuccess(message) {
     debugLog("清空片段面板");
 
     this.elements["current-tag-name"].textContent = "选择标签查看片段";
-    this.elements["btn-add-snippet"].disabled = true;
+    // this.elements["btn-add-snippet"].disabled = true;
     this.elements["snippet-list-container"].innerHTML = "";
     this.state.currentTag = null;
   }
@@ -1411,18 +1619,20 @@ showSuccess(message) {
   showAddSnippetModal() {
     debugLog("显示添加片段模态框");
 
-    if (!this.state.currentTag) {
-      this.showError("请先选择一个标签");
-      return;
-    }
+    // if (!this.state.currentTag) {
+    //   this.showError("请先选择一个标签");
+    //   return;
+    // }
 
     // 重置表单
     this.resetAddSnippetForm();
 
     // 设置当前标签
-    const tagsInput = this.elements["snippet-tags-input"];
-    if (tagsInput && this.state.currentTag.tag) {
-      tagsInput.value = `#{${this.state.currentTag.displayName}|${this.state.currentTag.slug}}`;
+    if (this.state.currentTag) {
+        const tagsInput = this.elements["snippet-tags-input"];
+        if (tagsInput && this.state.currentTag.tag) {
+            tagsInput.value = `#{${this.state.currentTag.displayName}|${this.state.currentTag.slug}}`;
+        }
     }
 
     // 显示模态框
@@ -1457,10 +1667,10 @@ showSuccess(message) {
     if (container) {
       container.innerHTML = `
                 <div class="snippet-item-form">
-                    <input type="text" class="snippet-short-name form-input" placeholder="短名称">
-                    <textarea class="snippet-content form-textarea" placeholder="正文内容" rows="2"></textarea>
+                    <input type="text" class="snippet-short-name form-input" placeholder="短名称(仅供记忆，不会在提示中加入)">
+                    <textarea class="snippet-content form-textarea" placeholder="正文内容(将插入在提示中当前标签位置的文字)" rows="2"></textarea>
                     <button type="button" class="btn-remove-snippet btn-danger">
-                        <i class="fas fa-trash"></i>
+                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash2-icon lucide-trash-2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                     </button>
                 </div>
             `;
@@ -1482,10 +1692,10 @@ showSuccess(message) {
     const itemForm = document.createElement("div");
     itemForm.className = "snippet-item-form";
     itemForm.innerHTML = `
-            <input type="text" class="snippet-short-name form-input" placeholder="短名称">
-            <textarea class="snippet-content form-textarea" placeholder="正文内容" rows="2"></textarea>
+            <input type="text" class="snippet-short-name form-input" placeholder="短名称(仅供记忆，不会在提示中加入)">
+            <textarea class="snippet-content form-textarea" placeholder="正文内容(将插入在提示中当前标签位置的文字)" rows="2"></textarea>
             <button type="button" class="btn-remove-snippet btn-danger">
-                <i class="fas fa-trash"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash2-icon lucide-trash-2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
             </button>
         `;
 
@@ -1521,51 +1731,51 @@ showSuccess(message) {
 /**
  * 保存新片段到数据库
  */
-async saveSnippetsToDatabase(snippetItems, processedTags) {
-    try {
-        debugLog('开始保存片段到数据库', { snippetItems, processedTags });
+// async saveSnippetsToDatabase(snippetItems, processedTags) {
+//     try {
+//         debugLog('开始保存片段到数据库', { snippetItems, processedTags });
         
-        const savedSnippets = [];
+//         const savedSnippets = [];
         
-        for (const item of snippetItems) {
-            // 生成片段ID
-            const snippetId = `snippet-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+//         for (const item of snippetItems) {
+//             // 生成片段ID
+//             const snippetId = `snippet-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
             
-            // 收集所有标签ID - 确保统一格式
-            const tagIds = [];
+//             // 收集所有标签ID - 确保统一格式
+//             const tagIds = [];
             
-            processedTags.forEach(tag => {
-                // 统一使用tagId作为关联标识
-                if (tag.tagId) tagIds.push(tag.tagId);
-            });
+//             processedTags.forEach(tag => {
+//                 // 统一使用tagId作为关联标识
+//                 if (tag.tagId) tagIds.push(tag.tagId);
+//             });
             
-            const snippetData = {
-                snippetId: snippetId,
-                shortName: item.shortName || item.content,
-                content: item.content,
-                tagIds: tagIds,  // 只使用tagId，确保格式一致
-                isTop: false,
-                updatedAt: new Date().toISOString(),
-                createdAt: new Date().toISOString()
-            };
+//             const snippetData = {
+//                 snippetId: snippetId,
+//                 shortName: item.shortName || item.content,
+//                 content: item.content,
+//                 tagIds: tagIds,  // 只使用tagId，确保格式一致
+//                 isTop: false,
+//                 updatedAt: new Date().toISOString(),
+//                 createdAt: new Date().toISOString()
+//             };
             
-            debugLog('准备保存片段', snippetData);
+//             debugLog('准备保存片段', snippetData);
             
-            // 保存到MiniDB
-            await this.collections.snippets.upsert(snippetData);
-            savedSnippets.push(snippetData);
+//             // 保存到MiniDB
+//             await this.collections.snippets.upsert(snippetData);
+//             savedSnippets.push(snippetData);
             
-            debugLog('片段保存成功', snippetData);
-        }
+//             debugLog('片段保存成功', snippetData);
+//         }
         
-        return savedSnippets;
+//         return savedSnippets;
         
-    } catch (error) {
-        console.error('保存片段失败:', error);
-        debugLog('片段保存错误', error);
-        throw error;
-    }
-}
+//     } catch (error) {
+//         console.error('保存片段失败:', error);
+//         debugLog('片段保存错误', error);
+//         throw error;
+//     }
+// }
 
   /**
    * 保存新片段
@@ -1802,15 +2012,7 @@ async saveSnippetsToDatabase(snippetItems, processedTags) {
     }
   }
 
-  /**
-   * 显示成功消息
-   * @param {string} message - 消息内容
-   */
-  showSuccess(message) {
-    debugLog("显示成功消息", message);
-    // TODO: 实现非模态提示组件
-    console.log("✅ " + message);
-  }
+ 
 
   /**
    * 显示警告消息
@@ -1822,15 +2024,6 @@ async saveSnippetsToDatabase(snippetItems, processedTags) {
     console.log("⚠️ " + message);
   }
 
-  /**
-   * 显示错误消息
-   * @param {string} message - 消息内容
-   */
-  showError(message) {
-    debugLog("显示错误消息", message);
-    // TODO: 实现非模态提示组件
-    console.error("❌ " + message);
-  }
 
   /**
    * 提交提示词（预留功能）
@@ -1903,6 +2096,8 @@ getComposedPrompt() {
             if (snippet) {
                 // 替换为片段内容
                 formula = formula.replace(fullTag, snippet.content);
+            }else{
+              formula = formula.replace(fullTag,` random ${tagName} `)
             }
         }
         
@@ -1915,7 +2110,27 @@ getComposedPrompt() {
     }
 }
 /**
- * 渲染编辑公式模式
+ * 更新修改公式按钮状态
+ * 根据是否有选中的公式调整按钮文本
+ */
+updateEditFormulaButtonState() {
+    try {
+        const editButton = this.elements['btn-edit-formula'];
+        if (!editButton) return;
+        
+        // if (this.state.currentFormula) {
+        //     // 有选中的公式，显示"修改公式"
+        //     editButton.textContent = '<i data-lucide="dna"></i>克隆公式';
+        // } else {
+        //     // 没有选中的公式，显示"新建公式"
+        //     editButton.textContent = '<i data-lucide="plus"></i>新建公式';
+        // }
+    } catch (error) {
+        console.error('更新编辑按钮状态失败:', error);
+        debugLog('编辑按钮状态更新错误', error);
+    }
+}
+ /* 渲染编辑公式模式
  * 允许用户编辑公式原文，包含标签的原始形式
  */
 renderEditMode() {
@@ -1923,7 +2138,7 @@ renderEditMode() {
         debugLog('渲染编辑公式模式');
         
         const displayArea = this.elements['formula-display-area'];
-        if (!displayArea || !this.state.currentFormula) return;
+        if (!displayArea) return;
         
         // 创建编辑表单容器
         const editContainer = document.createElement('div');
@@ -1937,8 +2152,10 @@ renderEditMode() {
         const titleInput = document.createElement('input');
         titleInput.type = 'text';
         titleInput.className = 'formula-title-input form-input';
-        titleInput.value = this.state.currentFormula.title;
+        titleInput.value = this.state.currentFormula ? this.state.currentFormula.title : '';
         titleInput.id = 'formula-edit-title';
+        titleInput.placeholder = '输入公式名称';
+        titleInput.required = true;
         
         // 创建公式内容文本区域
         const contentLabel = document.createElement('label');
@@ -1951,8 +2168,12 @@ renderEditMode() {
         contentTextarea.rows = 5;
         contentTextarea.placeholder = '使用 #{标签名} 添加标签，例如: Create a #{character} in #{style} style';
         
-        // 设置公式内容，确保标签以 #{标签名} 格式显示
-        contentTextarea.value = this.formatFormulaForEditing(this.state.currentFormula.content);
+        // 设置公式内容
+        if (this.state.currentFormula) {
+            contentTextarea.value = this.formatFormulaForEditing(this.state.currentFormula.content);
+        } else {
+            contentTextarea.value = '';
+        }
         
         // 创建描述输入
         const descLabel = document.createElement('label');
@@ -1962,8 +2183,9 @@ renderEditMode() {
         const descInput = document.createElement('input');
         descInput.type = 'text';
         descInput.className = 'formula-desc-input form-input';
-        descInput.value = this.state.currentFormula.description || '';
+        descInput.value = this.state.currentFormula ? (this.state.currentFormula.description || '') : '';
         descInput.id = 'formula-edit-desc';
+        descInput.placeholder = '输入公式描述';
         
         // 创建作者输入
         const authorLabel = document.createElement('label');
@@ -1973,8 +2195,9 @@ renderEditMode() {
         const authorInput = document.createElement('input');
         authorInput.type = 'text';
         authorInput.className = 'formula-author-input form-input';
-        authorInput.value = this.state.currentFormula.author || '';
+        authorInput.value = this.state.currentFormula ? (this.state.currentFormula.author || '') : '';
         authorInput.id = 'formula-edit-author';
+        authorInput.placeholder = '输入作者信息';
         
         // 创建模型选择
         const modelLabel = document.createElement('label');
@@ -2009,33 +2232,74 @@ renderEditMode() {
         saveButton.addEventListener('click', () => this.saveEditedFormula());
         cancelButton.addEventListener('click', () => this.cancelFormulaEdit());
         
-        // 将所有元素添加到表单
-        editContainer.appendChild(titleLabel);
-        editContainer.appendChild(titleInput);
-        editContainer.appendChild(contentLabel);
-        editContainer.appendChild(contentTextarea);
-        editContainer.appendChild(descLabel);
-        editContainer.appendChild(descInput);
-        editContainer.appendChild(authorLabel);
-        editContainer.appendChild(authorInput);
-        editContainer.appendChild(modelLabel);
-        editContainer.appendChild(modelSelect);
+
+        const modelLine=document.createElement('div');
+        modelLine.classList.add('form-line')
+        modelLine.appendChild(modelLabel);
+        modelLine.appendChild(modelSelect);
+
+        const titleLine=document.createElement('div');
+        titleLine.classList.add('form-line')
+        titleLine.appendChild(titleLabel);
+        titleLine.appendChild(titleInput);
+
+        const contentLine=document.createElement('div');
+        contentLine.classList.add('form-line')
+        contentLine.appendChild(contentLabel);
+        contentLine.appendChild(contentTextarea);
+
         
-        buttonContainer.appendChild(cancelButton);
-        buttonContainer.appendChild(saveButton);
-        editContainer.appendChild(buttonContainer);
+        const descAndAuthorLine=document.createElement('div');
+        descAndAuthorLine.classList.add('form-line')
+        descAndAuthorLine.appendChild(descLabel);
+        descAndAuthorLine.appendChild(descInput);
+        descAndAuthorLine.appendChild(authorLabel);
+        descAndAuthorLine.appendChild(authorInput);
+
+        
+        const actionBar=document.createElement('div');
+        actionBar.classList.add('form-action-bar');
+        // actionBar.setAttribute('id','form-action-bar');
+        actionBar.appendChild(cancelButton);
+        actionBar.appendChild(saveButton);
+
+
+        // 将所有元素添加到表单
+        
+
+        const leftPart=document.createElement('div');
+        leftPart.classList.add('left-part');
+        const rightPart=document.createElement('div');
+        rightPart.classList.add('right-part');
+        rightPart.appendChild(modelLine);
+
+        leftPart.appendChild(titleLine);
+        leftPart.appendChild(contentLine);
+        leftPart.appendChild(descAndAuthorLine);
+
+        const formBox=document.createElement('div');
+        formBox.classList.add('form-box');
+        formBox.appendChild(leftPart);
+        formBox.appendChild(rightPart);
+
+        editContainer.appendChild(formBox);
+        editContainer.appendChild(actionBar);
+        
         
         // 将表单添加到显示区
         displayArea.appendChild(editContainer);
         
-        // 选中之前设置的模型
-        if (this.state.currentFormula.modelIds && modelSelect.options.length > 0) {
+        // 如果有已选中的公式，选中之前设置的模型
+        if (this.state.currentFormula && this.state.currentFormula.modelIds && modelSelect.options.length > 0) {
             for (let i = 0; i < modelSelect.options.length; i++) {
                 if (this.state.currentFormula.modelIds.includes(modelSelect.options[i].value)) {
                     modelSelect.options[i].selected = true;
                 }
             }
         }
+        
+        // 设置标题输入框焦点
+        titleInput.focus();
         
         debugLog('编辑公式模式渲染完成');
         
@@ -2044,7 +2308,6 @@ renderEditMode() {
         debugLog('编辑公式模式渲染错误', error);
     }
 }
-
 /**
  * 加载模型选项到选择框
  * @param {HTMLSelectElement} selectElement - 模型选择框元素
@@ -2101,6 +2364,9 @@ formatFormulaForEditing(content) {
 /**
  * 保存编辑后的公式
  */
+/**
+ * 保存编辑后的公式
+ */
 async saveEditedFormula() {
     try {
         debugLog('开始保存编辑后的公式');
@@ -2113,24 +2379,27 @@ async saveEditedFormula() {
         const modelSelect = document.getElementById('formula-edit-model');
         
         if (!titleInput || !contentTextarea) {
-            throw new Error('找不到表单元素');
+            this.showError('表单元素不存在');
+            return;
         }
         
         const title = titleInput.value.trim();
         const content = contentTextarea.value.trim();
         
-        // 验证表单
+        // 表单验证
         if (!title) {
             this.showError('公式名称不能为空');
+            titleInput.focus();
             return;
         }
         
         if (!content) {
             this.showError('公式内容不能为空');
+            contentTextarea.focus();
             return;
         }
         
-        // 收集选中的模型ID
+        // 获取选中的模型ID
         const selectedModelIds = [];
         if (modelSelect) {
             for (let i = 0; i < modelSelect.options.length; i++) {
@@ -2140,34 +2409,63 @@ async saveEditedFormula() {
             }
         }
         
-        // 检查是否是修改现有公式或创建新公式
-        const isNewFormula = title !== this.state.currentFormula.title;
+        // 检查是否存在同名公式
+        const existingFormula = await this.collections.formulas.findOne({
+            title: title,
+            formulaId: { $ne: this.state.currentFormula ? this.state.currentFormula.formulaId : null }
+        });
         
-        if (isNewFormula) {
-            // 检查是否已存在同名公式
-            const existingFormula = await this.collections.formulas.findOne({ 
-                title: title 
+        let formulaId;
+        let createdAt;
+        
+        if (existingFormula) {
+            // 存在同名公式，询问用户是否覆盖
+            if (!confirm(`已存在名为"${title}"的公式，是否覆盖？选择"确定"覆盖，选择"取消"修改名称。`)) {
+                // 用户选择不覆盖，焦点返回到名称输入框
+                titleInput.focus();
+                return;
+            }
+            
+            // 用户选择覆盖，使用原公式ID并记录原创建时间
+            formulaId = existingFormula.formulaId;
+            createdAt = existingFormula.createdAt;
+            
+            // *** 关键修改：先删除原记录 ***
+            debugLog('删除原有公式记录', existingFormula);
+            await this.collections.formulas.remove(existingFormula._id);
+        } else {
+            // 新公式或更新当前公式
+            formulaId = this.state.currentFormula 
+                ? this.state.currentFormula.formulaId 
+                : `formula-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            createdAt = this.state.currentFormula 
+                ? this.state.currentFormula.createdAt 
+                : new Date().toISOString();
+        }
+        
+        // 如果是更新当前公式，也需要先删除原记录
+        if (this.state.currentFormula && !existingFormula) {
+            const currentFormulaRecord = await this.collections.formulas.findOne({
+                formulaId: this.state.currentFormula.formulaId
             });
             
-            if (existingFormula) {
-                // 确认是否覆盖
-                if (!confirm(`已存在名为"${title}"的公式，是否覆盖？`)) {
-                    return;
-                }
+            if (currentFormulaRecord) {
+                debugLog('删除当前公式记录', currentFormulaRecord);
+                await this.collections.formulas.remove(currentFormulaRecord._id);
             }
         }
         
-        // 准备公式数据
+        // 准备保存的数据
         const formulaData = {
-            formulaId: isNewFormula ? `formula-${Date.now()}` : this.state.currentFormula.formulaId,
+            formulaId: formulaId,
             title: title,
             content: content,
             description: descInput ? descInput.value.trim() : '',
             author: authorInput ? authorInput.value.trim() : '',
-            modelIds: selectedModelIds.length > 0 ? selectedModelIds : this.state.currentFormula.modelIds,
-            isTop: this.state.currentFormula.isTop,
+            modelIds: selectedModelIds,
+            isTop: this.state.currentFormula ? (this.state.currentFormula.isTop || false) : false,
             updatedAt: new Date().toISOString(),
-            createdAt: isNewFormula ? new Date().toISOString() : this.state.currentFormula.createdAt
+            createdAt: createdAt
         };
         
         // 保存到数据库
@@ -2180,10 +2478,13 @@ async saveEditedFormula() {
         this.switchMode('compose');
         
         // 刷新公式列表
-        await this.renderFormulaList();
+        await this.renderFormulaList(
+            this.elements['model-filter-dropdown'] ? this.elements['model-filter-dropdown'].value : '',
+            this.elements['formula-search-input'] ? this.elements['formula-search-input'].value : ''
+        );
         
         // 显示成功消息
-        this.showSuccess(isNewFormula ? '新公式创建成功' : '公式更新成功');
+        this.showSuccess('公式保存成功');
         
         debugLog('公式保存完成', formulaData);
         
@@ -2193,7 +2494,6 @@ async saveEditedFormula() {
         this.showError('保存公式失败: ' + error.message);
     }
 }
-
 /**
  * 取消公式编辑
  */
@@ -2282,7 +2582,7 @@ cancelFormulaEdit() {
  */
 document.addEventListener("DOMContentLoaded", async () => {
   debugLog("页面加载完成，开始初始化应用");
-
+  
   try {
     const app = new AISpellbookApp();
     await app.init();

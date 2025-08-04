@@ -3,17 +3,17 @@
   "lastUpdated": "2024-01-01T00:00:00Z",
   "models": [
     {
-      "modelId": "midjourney-v6",
-      "name": "Midjourney",
-      "version": "v6.0",
+      "modelId": "image-gen",
+      "name": "AI绘画",
+      "version": "",
       "sortOrder": 1,
       "isActive": true,
       "createdAt": "2024-01-01T00:00:00Z"
     },
     {
-      "modelId": "flux-dev",
-      "name": "FLUX",
-      "version": "dev",
+      "modelId": "llm-image",
+      "name": "LLM绘画",
+      "version": "",
       "sortOrder": 2,
       "isActive": true,
       "createdAt": "2024-01-01T00:00:00Z"
@@ -21,7 +21,7 @@
     {
       "modelId": "llm-general",
       "name": "LLM通用",
-      "version": "1.0",
+      "version": "",
       "sortOrder": 3,
       "isActive": true,
       "createdAt": "2024-01-01T00:00:00Z"
@@ -59,6 +59,26 @@
       "createdAt": "2024-01-01T00:00:00Z"
     },
     {
+      "tagId": "expression",
+      "slug": "expression",
+      "displayName": "表情",
+      "isMultiSelect": false,
+      "sortOrder": 4,
+      "isTop": false,
+      "parentId": null,
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "tagId": "pose",
+      "slug": "pose",
+      "displayName": "动作",
+      "isMultiSelect": false,
+      "sortOrder": 4,
+      "isTop": false,
+      "parentId": null,
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
       "tagId": "color",
       "slug": "color",
       "displayName": "颜色",
@@ -67,13 +87,239 @@
       "isTop": false,
       "parentId": null,
       "createdAt": "2024-01-01T00:00:00Z"
-    }
+    },
+    {
+      "tagId": "time",
+      "slug": "time",
+      "displayName": "时间",
+      "isMultiSelect": false,
+      "sortOrder": 4,
+      "isTop": false,
+      "parentId": null,
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "tagId": "weather",
+      "slug": "weather",
+      "displayName": "天气",
+      "isMultiSelect": false,
+      "sortOrder": 4,
+      "isTop": false,
+      "parentId": null,
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "tagId": "material",
+      "slug": "material",
+      "displayName": "材质",
+      "isMultiSelect": false,
+      "sortOrder": 4,
+      "isTop": false,
+      "parentId": null,
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "tagId": "lighting",
+      "slug": "lighting",
+      "displayName": "照明",
+      "isMultiSelect": false,
+      "sortOrder": 4,
+      "isTop": false,
+      "parentId": null,
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "tagId": "background",
+      "slug": "background",
+      "displayName": "背景",
+      "isMultiSelect": false,
+      "sortOrder": 4,
+      "isTop": false,
+      "parentId": null,
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "tagId": "room_type",
+      "slug": "room_type",
+      "displayName": "房间",
+      "isMultiSelect": false,
+      "sortOrder": 4,
+      "isTop": false,
+      "parentId": null,
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "tagId": "furniture",
+      "slug": "furniture",
+      "displayName": "家具",
+      "isMultiSelect": false,
+      "sortOrder": 4,
+      "isTop": false,
+      "parentId": null,
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "tagId": "decoration",
+      "slug": "decoration",
+      "displayName": "装饰",
+      "isMultiSelect": false,
+      "sortOrder": 4,
+      "isTop": false,
+      "parentId": null,
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+
+
+
+    {
+  "tagId": "clothing",
+  "slug": "clothing",
+  "displayName": "服装",
+  "isMultiSelect": false,
+  "sortOrder": 5,
+  "isTop": false,
+  "parentId": null,
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "tagId": "mood",
+  "slug": "mood",
+  "displayName": "氛围",
+  "isMultiSelect": false,
+  "sortOrder": 6,
+  "isTop": false,
+  "parentId": null,
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "tagId": "color_palette",
+  "slug": "color_palette",
+  "displayName": "色彩搭配",
+  "isMultiSelect": false,
+  "sortOrder": 9,
+  "isTop": false,
+  "parentId": null,
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "tagId": "architecture",
+  "slug": "architecture",
+  "displayName": "建筑",
+  "isMultiSelect": false,
+  "sortOrder": 10,
+  "isTop": false,
+  "parentId": null,
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "tagId": "object",
+  "slug": "object",
+  "displayName": "物品",
+  "isMultiSelect": false,
+  "sortOrder": 12,
+  "isTop": false,
+  "parentId": null,
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "tagId": "material",
+  "slug": "material",
+  "displayName": "材质",
+  "isMultiSelect": false,
+  "sortOrder": 13,
+  "isTop": false,
+  "parentId": null,
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "tagId": "decoration",
+  "slug": "decoration",
+  "displayName": "装饰",
+  "isMultiSelect": false,
+  "sortOrder": 15,
+  "isTop": false,
+  "parentId": null,
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "tagId": "color_scheme",
+  "slug": "color_scheme",
+  "displayName": "配色方案",
+  "isMultiSelect": false,
+  "sortOrder": 18,
+  "isTop": false,
+  "parentId": null,
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "tagId": "icon_type",
+  "slug": "icon_type",
+  "displayName": "图标类型",
+  "isMultiSelect": false,
+  "sortOrder": 19,
+  "isTop": false,
+  "parentId": null,
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "tagId": "size",
+  "slug": "size",
+  "displayName": "尺寸",
+  "isMultiSelect": false,
+  "sortOrder": 20,
+  "isTop": false,
+  "parentId": null,
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "tagId": "application",
+  "slug": "application",
+  "displayName": "应用场景",
+  "isMultiSelect": false,
+  "sortOrder": 21,
+  "isTop": false,
+  "parentId": null,
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "tagId": "theme",
+  "slug": "theme",
+  "displayName": "主题",
+  "isMultiSelect": false,
+  "sortOrder": 22,
+  "isTop": false,
+  "parentId": null,
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "tagId": "typography",
+  "slug": "typography",
+  "displayName": "字体",
+  "isMultiSelect": false,
+  "sortOrder": 23,
+  "isTop": false,
+  "parentId": null,
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "tagId": "layout",
+  "slug": "layout",
+  "displayName": "布局",
+  "isMultiSelect": false,
+  "sortOrder": 24,
+  "isTop": false,
+  "parentId": null,
+  "createdAt": "2024-01-01T00:00:00Z"
+}
+
+
   ],
+
   "snippets": [
     {
       "snippetId": "char-001",
       "shortName": "美女",
-      "content": "beautiful woman",
+      "content": "beautiful woman with stunning beautiful face and perfect figure",
       "tagIds": ["character"],
       "isTop": true,
       "updatedAt": "2024-01-01T00:00:00Z",
@@ -81,8 +327,8 @@
     },
     {
       "snippetId": "char-002",
-      "shortName": "男人",
-      "content": "handsome man",
+      "shortName": "帅哥",
+      "content": "handsome face man with slim muscle lines, narrow face",
       "tagIds": ["character"],
       "isTop": false,
       "updatedAt": "2024-01-01T00:00:00Z",
@@ -90,8 +336,161 @@
     },
     {
       "snippetId": "char-003",
-      "shortName": "小孩",
-      "content": "cute child",
+      "shortName": "可爱幼儿",
+      "content": "cute kawaii adorable toddler kid, childish face",
+      "tagIds": ["character"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "char-004",
+      "shortName": "猫娘",
+      "content": "cute kawaii cat-girl with cat ears and a fluffy cat tail",
+      "tagIds": ["character"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "char-005",
+      "shortName": "中国龙",
+      "content": "Chinese dragon with slim long body covered by scales and four claws",
+      "tagIds": ["character"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "char-006",
+      "shortName": "魔法生物",
+      "content": "fantastic magical creature who is never exists",
+      "tagIds": ["character"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "char-007",
+      "shortName": "武士",
+      "content": "samurai warrior with traditional armor and katana sword",
+      "tagIds": ["character"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "char-008",
+      "shortName": "精灵",
+      "content": "elegant elf with pointed ears and ethereal beauty",
+      "tagIds": ["character"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "char-009",
+      "shortName": "机器人",
+      "content": "futuristic robot with metallic body and glowing eyes",
+      "tagIds": ["character"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "char-010",
+      "shortName": "巫师",
+      "content": "wise wizard with long beard and magical staff",
+      "tagIds": ["character"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "char-011",
+      "shortName": "天使",
+      "content": "divine angel with pure white wings and holy aura",
+      "tagIds": ["character"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "char-012",
+      "shortName": "恶魔",
+      "content": "dark demon with horns and menacing red eyes",
+      "tagIds": ["character"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "char-013",
+      "shortName": "忍者",
+      "content": "stealthy ninja in black outfit with hidden weapons",
+      "tagIds": ["character"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "char-014",
+      "shortName": "公主",
+      "content": "elegant princess with royal dress and crown",
+      "tagIds": ["character"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "char-015",
+      "shortName": "骑士",
+      "content": "noble knight in shining armor with sword and shield",
+      "tagIds": ["character"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "char-016",
+      "shortName": "狼人",
+      "content": "fierce werewolf with wolf ears and sharp claws",
+      "tagIds": ["character"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "char-017",
+      "shortName": "吸血鬼",
+      "content": "mysterious vampire with pale skin and fangs",
+      "tagIds": ["character"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "char-018",
+      "shortName": "海盗",
+      "content": "adventurous pirate with eye patch and treasure map",
+      "tagIds": ["character"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "char-019",
+      "shortName": "独角兽",
+      "content": "majestic unicorn with spiral horn and rainbow mane",
+      "tagIds": ["character"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "char-020",
+      "shortName": "凤凰",
+      "content": "magnificent phoenix with fiery feathers and rebirth power",
       "tagIds": ["character"],
       "isTop": false,
       "updatedAt": "2024-01-01T00:00:00Z",
@@ -100,7 +499,7 @@
     {
       "snippetId": "style-001",
       "shortName": "写实",
-      "content": "photorealistic, highly detailed",
+      "content": "photorealistic, photography, highly detailed, shot with hasselblad top-tier equipment",
       "tagIds": ["style"],
       "isTop": true,
       "updatedAt": "2024-01-01T00:00:00Z",
@@ -109,7 +508,160 @@
     {
       "snippetId": "style-002",
       "shortName": "动漫",
-      "content": "anime style, manga art",
+      "content": "anime, japanese manga art",
+      "tagIds": ["style"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "style-004",
+      "shortName": "赛博朋克",
+      "content": "cyberpunk, futuristic, asiacore ",
+      "tagIds": ["style"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "style-005",
+      "shortName": "机甲风",
+      "content": "mecha mechacore mechanic hi-tech armored",
+      "tagIds": ["style"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "style-006",
+      "shortName": "哥特风",
+      "content": "goth, gothic style, gothcore ",
+      "tagIds": ["style"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "style-007",
+      "shortName": "水彩画",
+      "content": "watercolor painting, soft brushstrokes, translucent colors",
+      "tagIds": ["style"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "style-008",
+      "shortName": "油画",
+      "content": "oil painting, classical art, rich textures and deep colors",
+      "tagIds": ["style"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "style-009",
+      "shortName": "素描",
+      "content": "pencil sketch, black and white drawing, detailed linework",
+      "tagIds": ["style"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "style-010",
+      "shortName": "像素艺术",
+      "content": "pixel art, 8-bit style, retro gaming aesthetic",
+      "tagIds": ["style"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "style-011",
+      "shortName": "蒸汽朋克",
+      "content": "steampunk, victorian era, brass and copper machinery",
+      "tagIds": ["style"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "style-012",
+      "shortName": "极简主义",
+      "content": "minimalist, clean lines, simple composition, negative space",
+      "tagIds": ["style"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "style-013",
+      "shortName": "抽象艺术",
+      "content": "abstract art, non-representational, geometric shapes and colors",
+      "tagIds": ["style"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "style-014",
+      "shortName": "印象派",
+      "content": "impressionist style, loose brushwork, light and color emphasis",
+      "tagIds": ["style"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "style-015",
+      "shortName": "新艺术",
+      "content": "art nouveau, organic forms, decorative patterns, flowing lines",
+      "tagIds": ["style"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "style-016",
+      "shortName": "波普艺术",
+      "content": "pop art, bright colors, commercial imagery, bold graphics",
+      "tagIds": ["style"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "style-017",
+      "shortName": "中国风",
+      "content": "chinese traditional style, ink painting, oriental aesthetics",
+      "tagIds": ["style"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "style-018",
+      "shortName": "日式和风",
+      "content": "japanese style, wabi-sabi, zen aesthetics, traditional patterns",
+      "tagIds": ["style"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "style-019",
+      "shortName": "超现实主义",
+      "content": "surrealism, dreamlike imagery, impossible combinations",
+      "tagIds": ["style"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "style-020",
+      "shortName": "复古怀旧",
+      "content": "vintage retro style, nostalgic atmosphere, aged textures",
       "tagIds": ["style"],
       "isTop": false,
       "updatedAt": "2024-01-01T00:00:00Z",
@@ -125,34 +677,1791 @@
       "createdAt": "2024-01-01T00:00:00Z"
     },
     {
+      "snippetId": "env-002",
+      "shortName": "海底",
+      "content": "in the deepest ocean floor",
+      "tagIds": ["environment"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "env-003",
+      "shortName": "末世废墟",
+      "content": "ruined city of the apocalypse world",
+      "tagIds": ["environment"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "env-004",
+      "shortName": "疗愈系天堂",
+      "content": "paradise nature scene, vibe of therapy and rejuvenation",
+      "tagIds": ["environment"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "env-004",
+      "shortName": "雪山",
+      "content": "on top of snow-covered mountain peaks",
+      "tagIds": ["environment"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "env-005",
+      "shortName": "沙漠",
+      "content": "in the vast golden desert dunes",
+      "tagIds": ["environment"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "env-006",
+      "shortName": "城市夜景",
+      "content": "in neon-lit cyberpunk cityscape at night",
+      "tagIds": ["environment"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "env-007",
+      "shortName": "古堡",
+      "content": "in an ancient medieval castle",
+      "tagIds": ["environment"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "env-008",
+      "shortName": "太空",
+      "content": "floating in the vast cosmos among stars",
+      "tagIds": ["environment"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "env-009",
+      "shortName": "樱花园",
+      "content": "in a blooming cherry blossom garden",
+      "tagIds": ["environment"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "env-010",
+      "shortName": "火山",
+      "content": "near an active volcanic crater with lava",
+      "tagIds": ["environment"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "env-011",
+      "shortName": "竹林",
+      "content": "in a serene bamboo forest grove",
+      "tagIds": ["environment"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "env-012",
+      "shortName": "冰川",
+      "content": "on a massive arctic glacier landscape",
+      "tagIds": ["environment"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "env-013",
+      "shortName": "热带雨林",
+      "content": "deep in the lush tropical rainforest",
+      "tagIds": ["environment"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "env-014",
+      "shortName": "云端",
+      "content": "floating above the clouds in sky",
+      "tagIds": ["environment"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "env-015",
+      "shortName": "水下洞穴",
+      "content": "in a mysterious underwater cave system",
+      "tagIds": ["environment"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "env-016",
+      "shortName": "草原",
+      "content": "in the endless green prairie fields",
+      "tagIds": ["environment"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "env-017",
+      "shortName": "魔法图书馆",
+      "content": "in an enchanted magical library",
+      "tagIds": ["environment"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "env-018",
+      "shortName": "峡谷",
+      "content": "in a dramatic rocky canyon landscape",
+      "tagIds": ["environment"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "env-019",
+      "shortName": "月球表面",
+      "content": "on the desolate lunar surface",
+      "tagIds": ["environment"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "env-020",
+      "shortName": "花田",
+      "content": "in a colorful wildflower meadow",
+      "tagIds": ["environment"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
       "snippetId": "color-001",
-      "shortName": "红色",
-      "content": "red",
+      "shortName": "鲜红色",
+      "content": "vivid scarlet red",
       "tagIds": ["color"],
       "isTop": false,
       "updatedAt": "2024-01-01T00:00:00Z",
       "createdAt": "2024-01-01T00:00:00Z"
-    }
+    },
+    {
+      "snippetId": "color-002",
+      "shortName": "蓝紫色",
+      "content": "bluple, blue, purple",
+      "tagIds": ["color"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "color-003",
+      "shortName": "彩虹色",
+      "content": "multiple rainbow style color scheme",
+      "tagIds": ["color"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "color-004",
+      "shortName": "纯白色",
+      "content": "solid white, pure white",
+      "tagIds": ["color"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "color-005",
+      "shortName": "暖色系渐变",
+      "content": " multi-gradient[pink, purple, orange, white]",
+      "tagIds": ["color"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "color-006",
+      "shortName": "糖果色",
+      "content": "marshmallow candy style pastel toned",
+      "tagIds": ["color"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "color-007",
+      "shortName": "蓝绿色系",
+      "content": "mixed navy blue, sky blue, teal colors",
+      "tagIds": ["color"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "color-006",
+      "shortName": "珍珠母贝",
+      "content": "mother of pearl iridescent, holographic white",
+      "tagIds": ["color"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "expression-001",
+      "shortName": "微笑",
+      "content": "smile with mouth closed, curl up the corners of mouth, sweetest smile",
+      "tagIds": ["expression"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "expression-002",
+      "shortName": "搞笑",
+      "content": "playful mocking laugh with funny joking ",
+      "tagIds": ["expression"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "expression-003",
+      "shortName": "开心",
+      "content": "bright happy smile, eyes sparkling with joy, cheerful expression",
+      "tagIds": ["expression"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "expression-004",
+      "shortName": "惊讶",
+      "content": "wide open eyes, raised eyebrows, mouth slightly open in surprise",
+      "tagIds": ["expression"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "expression-005",
+      "shortName": "生气",
+      "content": "frowning face, narrowed eyes, tense jaw, angry expression",
+      "tagIds": ["expression"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "expression-006",
+      "shortName": "悲伤",
+      "content": "downturned mouth, droopy eyes, melancholy sad expression",
+      "tagIds": ["expression"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "expression-007",
+      "shortName": "害怕",
+      "content": "wide fearful eyes, trembling lips, scared worried expression",
+      "tagIds": ["expression"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "expression-008",
+      "shortName": "困惑",
+      "content": "tilted head, puzzled look, confused questioning expression",
+      "tagIds": ["expression"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "expression-009",
+      "shortName": "思考",
+      "content": "hand on chin, contemplative look, deep thinking expression",
+      "tagIds": ["expression"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "expression-010",
+      "shortName": "兴奋",
+      "content": "bright eyes, energetic smile, enthusiastic excited expression",
+      "tagIds": ["expression"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "expression-011",
+      "shortName": "平静",
+      "content": "serene face, relaxed features, peaceful calm expression",
+      "tagIds": ["expression"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "expression-012",
+      "shortName": "厌恶",
+      "content": "wrinkled nose, disgusted look, repulsed facial expression",
+      "tagIds": ["expression"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "expression-013",
+      "shortName": "羞涩",
+      "content": "blushing cheeks, shy smile, bashful timid expression",
+      "tagIds": ["expression"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "expression-014",
+      "shortName": "骄傲",
+      "content": "chin up, confident smile, proud satisfied expression",
+      "tagIds": ["expression"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "expression-015",
+      "shortName": "疲惫",
+      "content": "tired eyes, weary look, exhausted fatigued expression",
+      "tagIds": ["expression"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "expression-016",
+      "shortName": "专注",
+      "content": "intense gaze, focused eyes, concentrated determined expression",
+      "tagIds": ["expression"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "expression-017",
+      "shortName": "无聊",
+      "content": "blank stare, yawning, bored uninterested expression",
+      "tagIds": ["expression"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "expression-018",
+      "shortName": "调皮",
+      "content": "mischievous grin, winking eye, playful naughty expression",
+      "tagIds": ["expression"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "expression-019",
+      "shortName": "温柔",
+      "content": "soft smile, gentle eyes, tender caring expression",
+      "tagIds": ["expression"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "expression-020",
+      "shortName": "严肃",
+      "content": "stern face, serious look, solemn grave expression",
+      "tagIds": ["expression"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+
+    {
+      "snippetId": "pose-001",
+      "shortName": "站立",
+      "content": "standing upright, straight posture, arms naturally at sides",
+      "tagIds": ["pose"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "pose-002",
+      "shortName": "坐姿",
+      "content": "sitting position, relaxed posture, hands resting on lap",
+      "tagIds": ["pose"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "pose-003",
+      "shortName": "奔跑",
+      "content": "running motion, dynamic stride, arms swinging naturally",
+      "tagIds": ["pose"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "pose-004",
+      "shortName": "跳跃",
+      "content": "jumping position, body elevated, arms extended for balance",
+      "tagIds": ["pose"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "pose-005",
+      "shortName": "躺卧",
+      "content": "lying down, relaxed horizontal position, arms alongside body",
+      "tagIds": ["pose"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "pose-006",
+      "shortName": "舞蹈",
+      "content": "dancing pose, graceful movement, expressive arm position",
+      "tagIds": ["pose"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "pose-007",
+      "shortName": "指点",
+      "content": "pointing gesture, arm extended, index finger directed at target",
+      "tagIds": ["pose"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "pose-008",
+      "shortName": "鞠躬",
+      "content": "bowing gesture, upper body bent forward, respectful posture",
+      "tagIds": ["pose"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "pose-009",
+      "shortName": "挥手",
+      "content": "waving hand, arm raised, friendly greeting gesture",
+      "tagIds": ["pose"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "pose-010",
+      "shortName": "握手",
+      "content": "handshake position, arm extended forward, open palm",
+      "tagIds": ["pose"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "pose-011",
+      "shortName": "拥抱",
+      "content": "hugging pose, arms wrapped around, warm embracing position",
+      "tagIds": ["pose"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "pose-012",
+      "shortName": "战斗",
+      "content": "fighting stance, defensive posture, ready position with raised arms",
+      "tagIds": ["pose"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "pose-013",
+      "shortName": "冥想",
+      "content": "meditation pose, cross-legged sitting, hands resting on knees",
+      "tagIds": ["pose"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "pose-014",
+      "shortName": "游泳",
+      "content": "swimming motion, arms extended forward, body streamlined",
+      "tagIds": ["pose"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "pose-015",
+      "shortName": "抱臂",
+      "content": "arms crossed, confident stance, slightly tilted head",
+      "tagIds": ["pose"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "pose-016",
+      "shortName": "举手",
+      "content": "raising hand, arm extended upward, attention-seeking gesture",
+      "tagIds": ["expression"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "pose-017",
+      "shortName": "蹲姿",
+      "content": "squatting position, knees bent, balanced lower position",
+      "tagIds": ["expression"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "pose-018",
+      "shortName": "行走",
+      "content": "walking motion, natural stride, relaxed arm movement",
+      "tagIds": ["expression"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "pose-019",
+      "shortName": "俯卧撑",
+      "content": "push-up position, body parallel to ground, arms supporting weight",
+      "tagIds": ["expression"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "pose-020",
+      "shortName": "瑜伽姿势",
+      "content": "yoga pose, balanced body position, controlled breathing stance",
+      "tagIds": ["expression"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "time-001",
+      "shortName": "黎明",
+      "content": "at dawn, early morning light, golden hour sunrise",
+      "tagIds": ["time"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "time-002",
+      "shortName": "正午",
+      "content": "at noon, bright midday sun, harsh overhead lighting",
+      "tagIds": ["time"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "time-003",
+      "shortName": "黄昏",
+      "content": "at sunset, golden hour, warm evening light",
+      "tagIds": ["time"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "time-004",
+      "shortName": "夜晚",
+      "content": "at night, moonlight, starry sky, nocturnal atmosphere",
+      "tagIds": ["time"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "time-005",
+      "shortName": "深夜",
+      "content": "late at night, midnight hour, dark and quiet",
+      "tagIds": ["time"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "weather-001",
+      "shortName": "晴朗",
+      "content": "clear sunny weather, bright blue sky, perfect visibility",
+      "tagIds": ["weather"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "weather-002",
+      "shortName": "多云",
+      "content": "cloudy weather, overcast sky, soft diffused light",
+      "tagIds": ["weather"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "weather-003",
+      "shortName": "雨天",
+      "content": "rainy weather, water droplets, wet surfaces, moody atmosphere",
+      "tagIds": ["weather"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "weather-004",
+      "shortName": "雪天",
+      "content": "snowy weather, falling snowflakes, winter wonderland",
+      "tagIds": ["weather"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "weather-005",
+      "shortName": "雾天",
+      "content": "foggy weather, misty atmosphere, limited visibility",
+      "tagIds": ["weather"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "material-001",
+      "shortName": "木质",
+      "content": "wooden material, natural wood grain, warm texture",
+      "tagIds": ["material"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "material-002",
+      "shortName": "金属",
+      "content": "metallic material, shiny surface, reflective finish",
+      "tagIds": ["material"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "material-003",
+      "shortName": "玻璃",
+      "content": "glass material, transparent surface, crystal clear",
+      "tagIds": ["material"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "material-004",
+      "shortName": "布料",
+      "content": "fabric material, soft textile, woven texture",
+      "tagIds": ["material"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "material-005",
+      "shortName": "皮革",
+      "content": "leather material, rich texture, luxurious finish",
+      "tagIds": ["material"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "lighting-001",
+      "shortName": "自然光",
+      "content": "natural lighting, sunlight, organic illumination",
+      "tagIds": ["lighting"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "lighting-002",
+      "shortName": "暖光",
+      "content": "warm lighting, cozy atmosphere, golden glow",
+      "tagIds": ["lighting"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "lighting-003",
+      "shortName": "冷光",
+      "content": "cool lighting, crisp illumination, blue-white tone",
+      "tagIds": ["lighting"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "lighting-004",
+      "shortName": "戏剧性照明",
+      "content": "dramatic lighting, high contrast, moody shadows",
+      "tagIds": ["lighting"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "lighting-005",
+      "shortName": "柔光",
+      "content": "soft lighting, diffused glow, gentle illumination",
+      "tagIds": ["lighting"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "background-001",
+      "shortName": "纯色背景",
+      "content": "solid color background, clean and simple",
+      "tagIds": ["background"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "background-002",
+      "shortName": "渐变背景",
+      "content": "gradient background, smooth color transition",
+      "tagIds": ["background"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "background-003",
+      "shortName": "纹理背景",
+      "content": "textured background, detailed surface pattern",
+      "tagIds": ["background"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "background-004",
+      "shortName": "模糊背景",
+      "content": "blurred background, bokeh effect, depth of field",
+      "tagIds": ["background"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "background-005",
+      "shortName": "透明背景",
+      "content": "transparent background, isolated subject, PNG format",
+      "tagIds": ["background"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "room-001",
+      "shortName": "客厅",
+      "content": "living room, comfortable seating area, family space",
+      "tagIds": ["room_type"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "room-002",
+      "shortName": "卧室",
+      "content": "bedroom, sleeping area, private sanctuary",
+      "tagIds": ["room_type"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "room-003",
+      "shortName": "厨房",
+      "content": "kitchen, cooking space, culinary workspace",
+      "tagIds": ["room_type"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "room-004",
+      "shortName": "办公室",
+      "content": "office, workspace, professional environment",
+      "tagIds": ["room_type"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "room-005",
+      "shortName": "浴室",
+      "content": "bathroom, bathing area, personal hygiene space",
+      "tagIds": ["room_type"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "furniture-001",
+      "shortName": "沙发",
+      "content": "sofa, comfortable seating, upholstered furniture",
+      "tagIds": ["furniture"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "furniture-002",
+      "shortName": "桌椅",
+      "content": "table and chairs, dining set, workspace furniture",
+      "tagIds": ["furniture"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "furniture-003",
+      "shortName": "书架",
+      "content": "bookshelf, storage unit, display furniture",
+      "tagIds": ["furniture"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "furniture-004",
+      "shortName": "床",
+      "content": "bed, sleeping furniture, bedroom centerpiece",
+      "tagIds": ["furniture"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "furniture-005",
+      "shortName": "衣柜",
+      "content": "wardrobe, clothing storage, bedroom furniture",
+      "tagIds": ["furniture"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "decoration-001",
+      "shortName": "植物",
+      "content": "plants, greenery, natural decoration",
+      "tagIds": ["decoration"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "decoration-002",
+      "shortName": "艺术品",
+      "content": "artwork, paintings, decorative art pieces",
+      "tagIds": ["decoration"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "decoration-003",
+      "shortName": "抱枕",
+      "content": "cushions, throw pillows, soft furnishings",
+      "tagIds": ["decoration"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "decoration-004",
+      "shortName": "地毯",
+      "content": "carpet, rug, floor covering decoration",
+      "tagIds": ["decoration"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "snippetId": "decoration-005",
+      "shortName": "窗帘",
+      "content": "curtains, window treatments, fabric draping",
+      "tagIds": ["decoration"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },{
+  "snippetId": "clothing-001",
+  "shortName": "休闲装",
+  "content": "casual clothing, comfortable outfit, everyday wear",
+  "tagIds": ["clothing"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "clothing-002",
+  "shortName": "正装",
+  "content": "formal attire, business suit, professional clothing",
+  "tagIds": ["clothing"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "clothing-003",
+  "shortName": "古装",
+  "content": "traditional costume, historical clothing, period dress",
+  "tagIds": ["clothing"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},{
+  "snippetId": "clothing-004",
+  "shortName": "运动装",
+  "content": "sportswear, athletic clothing, activewear outfit",
+  "tagIds": ["clothing"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "clothing-005",
+  "shortName": "晚礼服",
+  "content": "evening gown, formal dress, elegant attire",
+  "tagIds": ["clothing"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "clothing-006",
+  "shortName": "校服",
+  "content": "school uniform, student outfit, academic dress",
+  "tagIds": ["clothing"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "clothing-007",
+  "shortName": "和服",
+  "content": "kimono, traditional Japanese clothing, oriental robe",
+  "tagIds": ["clothing"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "clothing-008",
+  "shortName": "汉服",
+  "content": "hanfu, traditional Chinese clothing, ancient costume",
+  "tagIds": ["clothing"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "clothing-009",
+  "shortName": "军装",
+  "content": "military uniform, soldier outfit, combat gear",
+  "tagIds": ["clothing"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "clothing-010",
+  "shortName": "婚纱",
+  "content": "wedding dress, bridal gown, white dress",
+  "tagIds": ["clothing"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "clothing-011",
+  "shortName": "泳装",
+  "content": "swimwear, bathing suit, beach outfit",
+  "tagIds": ["clothing"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "clothing-012",
+  "shortName": "睡衣",
+  "content": "pajamas, sleepwear, nightgown",
+  "tagIds": ["clothing"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "clothing-013",
+  "shortName": "工作服",
+  "content": "work uniform, professional attire, occupational clothing",
+  "tagIds": ["clothing"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+
+
+{
+  "snippetId": "mood-001",
+  "shortName": "温馨",
+  "content": "warm and cozy atmosphere, intimate feeling",
+  "tagIds": ["mood"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "mood-002",
+  "shortName": "神秘",
+  "content": "mysterious atmosphere, enigmatic mood",
+  "tagIds": ["mood"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "mood-003",
+  "shortName": "浪漫",
+  "content": "romantic atmosphere, dreamy mood",
+  "tagIds": ["mood"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},{
+  "snippetId": "object-001",
+  "shortName": "花瓶",
+  "content": "elegant vase, decorative vessel",
+  "tagIds": ["object"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "object-002",
+  "shortName": "书籍",
+  "content": "books, literature, reading materials",
+  "tagIds": ["object"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "object-003",
+  "shortName": "咖啡杯",
+  "content": "coffee cup, beverage container",
+  "tagIds": ["object"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},{
+  "snippetId": "architecture-001",
+  "shortName": "现代建筑",
+  "content": "modern architecture, contemporary buildings",
+  "tagIds": ["architecture"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "architecture-002",
+  "shortName": "古典建筑",
+  "content": "classical architecture, traditional buildings",
+  "tagIds": ["architecture"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "architecture-003",
+  "shortName": "哥特式建筑",
+  "content": "gothic architecture, pointed arches, flying buttresses",
+  "tagIds": ["architecture"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "architecture-004",
+  "shortName": "巴洛克建筑",
+  "content": "baroque architecture, ornate decoration, dramatic curves",
+  "tagIds": ["architecture"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "architecture-005",
+  "shortName": "中式建筑",
+  "content": "chinese architecture, traditional pagoda, courtyard design",
+  "tagIds": ["architecture"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "architecture-006",
+  "shortName": "日式建筑",
+  "content": "japanese architecture, wooden structure, zen design",
+  "tagIds": ["architecture"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "architecture-007",
+  "shortName": "摩天大楼",
+  "content": "skyscraper, high-rise building, urban tower",
+  "tagIds": ["architecture"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "architecture-008",
+  "shortName": "别墅",
+  "content": "villa, luxury house, residential mansion",
+  "tagIds": ["architecture"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "architecture-009",
+  "shortName": "教堂",
+  "content": "church, cathedral, religious architecture",
+  "tagIds": ["architecture"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "architecture-010",
+  "shortName": "桥梁",
+  "content": "bridge architecture, spanning structure, engineering marvel",
+  "tagIds": ["architecture"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "architecture-011",
+  "shortName": "工业建筑",
+  "content": "industrial architecture, factory building, functional design",
+  "tagIds": ["architecture"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "architecture-012",
+  "shortName": "未来建筑",
+  "content": "futuristic architecture, sci-fi building, avant-garde design",
+  "tagIds": ["architecture"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "icon-001",
+  "shortName": "应用图标",
+  "content": "app icon, mobile application symbol",
+  "tagIds": ["icon_type"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "icon-002",
+  "shortName": "网站图标",
+  "content": "website icon, web interface symbol",
+  "tagIds": ["icon_type"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},{
+  "snippetId": "size-001",
+  "shortName": "小尺寸",
+  "content": "small size, compact format",
+  "tagIds": ["size"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "size-002",
+  "shortName": "大尺寸",
+  "content": "large size, full format",
+  "tagIds": ["size"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},{
+  "snippetId": "object-004",
+  "shortName": "手机",
+  "content": "smartphone, mobile device, communication gadget",
+  "tagIds": ["object"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "object-005",
+  "shortName": "笔记本电脑",
+  "content": "laptop computer, portable device, work machine",
+  "tagIds": ["object"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "object-006",
+  "shortName": "相机",
+  "content": "camera, photography equipment, lens device",
+  "tagIds": ["object"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "object-007",
+  "shortName": "手表",
+  "content": "watch, timepiece, wrist accessory",
+  "tagIds": ["object"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "object-008",
+  "shortName": "钢笔",
+  "content": "fountain pen, writing instrument, elegant tool",
+  "tagIds": ["object"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "object-009",
+  "shortName": "眼镜",
+  "content": "glasses, eyewear, vision accessory",
+  "tagIds": ["object"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "object-010",
+  "shortName": "钥匙",
+  "content": "keys, metal tool, access device",
+  "tagIds": ["object"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "object-011",
+  "shortName": "背包",
+  "content": "backpack, bag, carrying equipment",
+  "tagIds": ["object"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "object-012",
+  "shortName": "乐器",
+  "content": "musical instrument, sound device, artistic tool",
+  "tagIds": ["object"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "object-013",
+  "shortName": "珠宝",
+  "content": "jewelry, precious accessory, luxury item",
+  "tagIds": ["object"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},{
+  "snippetId": "mood-004",
+  "shortName": "宁静",
+  "content": "peaceful atmosphere, serene mood, tranquil feeling",
+  "tagIds": ["mood"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "mood-005",
+  "shortName": "激动",
+  "content": "exciting atmosphere, energetic mood, thrilling feeling",
+  "tagIds": ["mood"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "mood-006",
+  "shortName": "忧郁",
+  "content": "melancholic atmosphere, sad mood, gloomy feeling",
+  "tagIds": ["mood"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "mood-007",
+  "shortName": "欢乐",
+  "content": "joyful atmosphere, happy mood, cheerful feeling",
+  "tagIds": ["mood"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "mood-008",
+  "shortName": "紧张",
+  "content": "tense atmosphere, anxious mood, suspenseful feeling",
+  "tagIds": ["mood"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "mood-009",
+  "shortName": "梦幻",
+  "content": "dreamy atmosphere, surreal mood, fantasy feeling",
+  "tagIds": ["mood"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "mood-010",
+  "shortName": "恐怖",
+  "content": "horror atmosphere, scary mood, frightening feeling",
+  "tagIds": ["mood"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "mood-011",
+  "shortName": "怀旧",
+  "content": "nostalgic atmosphere, vintage mood, retro feeling",
+  "tagIds": ["mood"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "mood-012",
+  "shortName": "庄严",
+  "content": "solemn atmosphere, dignified mood, formal feeling",
+  "tagIds": ["mood"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "mood-013",
+  "shortName": "活力",
+  "content": "vibrant atmosphere, dynamic mood, energetic feeling",
+  "tagIds": ["mood"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+
+{
+  "snippetId": "color-scheme-001",
+  "shortName": "互补色搭配",
+  "content": "complementary color scheme, contrasting colors, vibrant combination",
+  "tagIds": ["color_scheme"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "color-scheme-002",
+  "shortName": "三角色搭配",
+  "content": "triadic color scheme, three balanced colors, dynamic harmony",
+  "tagIds": ["color_scheme"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "color-scheme-003",
+  "shortName": "分裂互补",
+  "content": "split-complementary color scheme, sophisticated contrast, balanced tension",
+  "tagIds": ["color_scheme"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "color-scheme-004",
+  "shortName": "四角色搭配",
+  "content": "tetradic color scheme, four-color harmony, rich palette",
+  "tagIds": ["color_scheme"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "color-scheme-005",
+  "shortName": "暖冷对比",
+  "content": "warm and cool color contrast, temperature balance, dramatic effect",
+  "tagIds": ["color_scheme"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "color-scheme-006",
+  "shortName": "彩虹渐变",
+  "content": "rainbow gradient scheme, spectrum colors, vibrant transition",
+  "tagIds": ["color_scheme"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "color-scheme-007",
+  "shortName": "大地色系",
+  "content": "earth tone color scheme, natural browns and greens, organic palette",
+  "tagIds": ["color_scheme"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "color-scheme-008",
+  "shortName": "海洋色系",
+  "content": "ocean color scheme, blues and teals, aquatic harmony",
+  "tagIds": ["color_scheme"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "color-scheme-009",
+  "shortName": "日落色系",
+  "content": "sunset color scheme, warm oranges and purples, golden hour palette",
+  "tagIds": ["color_scheme"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "color-scheme-010",
+  "shortName": "霓虹色系",
+  "content": "neon color scheme, bright electric colors, cyberpunk palette",
+  "tagIds": ["color_scheme"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+
+{
+  "snippetId": "color-palette-001",
+  "shortName": "蓝色调色板",
+  "content": "blue monochromatic palette, various blue tones and saturations",
+  "tagIds": ["color_palette"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "color-palette-002",
+  "shortName": "红色调色板",
+  "content": "red monochromatic palette, crimson to pink variations",
+  "tagIds": ["color_palette"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "color-palette-003",
+  "shortName": "绿色调色板",
+  "content": "green monochromatic palette, forest to mint variations",
+  "tagIds": ["color_palette"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "color-palette-004",
+  "shortName": "紫色调色板",
+  "content": "purple monochromatic palette, deep violet to lavender tones",
+  "tagIds": ["color_palette"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "color-palette-005",
+  "shortName": "橙色调色板",
+  "content": "orange monochromatic palette, burnt orange to peach variations",
+  "tagIds": ["color_palette"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "color-palette-006",
+  "shortName": "黄色调色板",
+  "content": "yellow monochromatic palette, golden to cream variations",
+  "tagIds": ["color_palette"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "color-palette-007",
+  "shortName": "灰色调色板",
+  "content": "gray monochromatic palette, charcoal to light gray spectrum",
+  "tagIds": ["color_palette"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "color-palette-008",
+  "shortName": "棕色调色板",
+  "content": "brown monochromatic palette, chocolate to beige variations",
+  "tagIds": ["color_palette"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "color-palette-009",
+  "shortName": "粉色调色板",
+  "content": "pink monochromatic palette, rose to blush variations",
+  "tagIds": ["color_palette"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+},
+{
+  "snippetId": "color-palette-010",
+  "shortName": "青色调色板",
+  "content": "cyan monochromatic palette, turquoise to aqua variations",
+  "tagIds": ["color_palette"],
+  "isTop": false,
+  "updatedAt": "2024-01-01T00:00:00Z",
+  "createdAt": "2024-01-01T00:00:00Z"
+}
   ],
   "formulas": [
     {
       "formulaId": "formula-001",
       "title": "基础人物画像",
-      "content": "Create a #{character} in #{style} style, wearing #{color} outfit, set in #{environment}",
+      "content": "A #{character} in #{style} style, wearing #{color} outfit, set in #{environment}",
       "description": "用于生成基础人物画像的公式模板",
       "author": "系统默认",
-      "modelIds": ["midjourney-v6", "flux-dev"],
+      "modelIds": ["image-gen"],
       "isTop": true,
       "updatedAt": "2024-01-01T00:00:00Z",
       "createdAt": "2024-01-01T00:00:00Z"
     },
     {
       "formulaId": "formula-002",
-      "title": "简单角色描述",
-      "content": "A #{character} with #{style} appearance",
+      "title": "生动的角色动作特写",
+      "content": "A close up view of #{character} with #{expression} expression, active, lively, dynamic pose of #{pose}",
       "description": "简单的角色描述公式",
       "author": "系统默认",
-      "modelIds": ["llm-general"],
+      "modelIds": ["image-gen"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "formulaId": "formula-003",
+      "title": "风景手机壁纸",
+      "content": "A scene of #{environment} with #{style} appearance, Perfect aesthetic wallpaper, Balanced and soft color scheme, 8k UHD advertising photography",
+      "description": "提高质量和审美的风景图，适合做壁纸",
+      "author": "系统默认",
+      "modelIds": ["image-gen"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "formulaId": "formula-004",
+      "title": "详细人物肖像",
+      "content": "A detailed portrait of #{character} with #{expression} expression, #{pose} pose, wearing #{clothing} in #{color} color, #{style} art style, #{lighting} lighting, high quality, detailed features",
+      "description": "生成详细人物肖像的综合模板",
+      "author": "系统默认",
+      "modelIds": ["image-gen"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "formulaId": "formula-005",
+      "title": "人物全身像",
+      "content": "Full body shot of #{character} in #{pose} pose, wearing #{clothing}, set in #{environment}, #{style} style, #{mood} atmosphere, professional photography",
+      "description": "生成人物全身像的模板",
+      "author": "系统默认",
+      "modelIds": ["image-gen"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "formulaId": "formula-006",
+      "title": "自然风景画",
+      "content": "A breathtaking view of #{environment} during #{time}, #{weather} weather, #{style} art style, #{color_palette} color palette, serene and peaceful atmosphere, high resolution",
+      "description": "生成自然风景画的模板",
+      "author": "系统默认",
+      "modelIds": ["image-gen"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "formulaId": "formula-007",
+      "title": "城市景观",
+      "content": "Urban landscape of #{environment} with #{architecture} buildings, #{lighting} lighting, #{style} aesthetic, #{mood} atmosphere, modern cityscape photography",
+      "description": "生成城市景观的模板",
+      "author": "系统默认",
+      "modelIds": ["image-gen"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "formulaId": "formula-008",
+      "title": "产品展示",
+      "content": "Professional product photography of #{object} in #{color} color, #{material} material, placed on #{background}, #{lighting} lighting, #{style} aesthetic, commercial quality, detailed texture",
+      "description": "生成产品展示图的模板",
+      "author": "系统默认",
+      "modelIds": ["image-gen"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "formulaId": "formula-009",
+      "title": "艺术静物",
+      "content": "Artistic still life composition featuring #{object} with #{decoration} elements, #{style} art style, #{color_scheme} color scheme, elegant arrangement, museum quality",
+      "description": "生成艺术静物画的模板",
+      "author": "系统默认",
+      "modelIds": ["image-gen"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "formulaId": "formula-010",
+      "title": "图标设计",
+      "content": "Modern #{icon_type} icon design with #{color} color scheme, #{style} style, clean and minimalist, #{size} format, professional vector graphics, suitable for #{application}",
+      "description": "生成图标设计的模板",
+      "author": "系统默认",
+      "modelIds": ["image-gen"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "formulaId": "formula-011",
+      "title": "海报设计",
+      "content": "Creative poster design for #{theme} with #{typography} typography, #{color_palette} color palette, #{layout} layout, #{style} aesthetic, eye-catching and professional",
+      "description": "生成海报设计的模板",
+      "author": "系统默认",
+      "modelIds": ["image-gen"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "formulaId": "formula-012",
+      "title": "室内空间设计",
+      "content": "Interior design of #{room_type} with #{furniture} furniture, #{color_scheme} color scheme, #{lighting} lighting, #{style} design style, #{mood} atmosphere, architectural photography",
+      "description": "生成室内空间设计的模板",
+      "author": "系统默认",
+      "modelIds": ["image-gen"],
+      "isTop": false,
+      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2024-01-01T00:00:00Z"
+    },
+    {
+      "formulaId": "formula-013",
+      "title": "家居装饰",
+      "content": "Cozy #{room_type} interior with #{decoration} decorations, #{material} materials, #{color} color tones, #{style} home style, warm and inviting atmosphere, lifestyle photography",
+      "description": "生成家居装饰的模板",
+      "author": "系统默认",
+      "modelIds": ["image-gen"],
       "isTop": false,
       "updatedAt": "2024-01-01T00:00:00Z",
       "createdAt": "2024-01-01T00:00:00Z"
@@ -163,6 +2472,6 @@
     "language": "zh-CN",
     "autoSave": true,
     "maxSnippets": 500,
-    "defaultModel": "midjourney-v6"
+    "defaultModel": "image-gen"
   }
 }

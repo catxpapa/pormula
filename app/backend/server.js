@@ -271,14 +271,23 @@ app.delete('/api/test/cleanup', async (req, res) => {
 });
 
 // 默认路由 - 返回主页--devshell临时
-app.get('/', (req, res) => {
-    // console.log(req)
-    res.sendFile(path.join(__dirname, '../web/index.html'));
-});
-app.get('/css/style.css', (req, res) => {
-    // console.log(req)
-    res.sendFile(path.join(__dirname, '../web/css/style.css'));
-});
+// app.get('/', (req, res) => {
+//     // console.log(req)
+//     res.sendFile(path.join(__dirname, '../web/index.html'));
+// });
+// app.get('/css/style.css', (req, res) => {
+//     // console.log(req)
+//     res.sendFile(path.join(__dirname, '../web/css/style.css'));
+// });
+// // app.get('/js/app.js', (req, res) => {
+// //     // console.log(req)
+// //     res.sendFile(path.join(__dirname, '../web/js/app.js'));
+// // });
+// app.get('/logo.png', (req, res) => {
+//     // console.log(req)
+//     res.sendFile(path.join(__dirname, '../web/logo.png'));
+// });
+
 
 
 
