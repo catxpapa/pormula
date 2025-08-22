@@ -2028,9 +2028,58 @@ copyPrompt() {
   /**
    * 提交提示词（预留功能）
    */
-  submitPrompt() {
-    debugLog("提交提示词（预留功能）");
-    this.showWarning("提交功能暂未实现");
+  async submitPrompt() {
+ 
+        let promptText = '';
+        
+        // 根据当前模式获取提示词内容
+        if (this.state.currentMode === 'manual') {
+            // 从手动编辑的文本区域获取最新内容
+            const textArea = document.querySelector('.formula-manual-textarea');
+            if (textArea) {
+                promptText = textArea.value;
+            } else {
+                promptText = this.state.manualEditContent || this.getComposedPrompt();
+            }
+        } else {
+            // 组合模式或其他模式，使用合成的提示词
+            promptText = this.getComposedPrompt();
+        }
+        
+fetch('/api/catimg/prompt', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ 
+        prompt: promptText
+    })
+})
+.then(response => response.json())
+.then(data => {
+    console.log('✅ 提交成功:', data);
+    // 同时打开新窗口
+
+       // 根据不同原因显示不同的提示
+            // if (data.reason === 'app_not_installed') {
+            //     console.log('🏪 跳转到应用商店安装catimg');
+            // } else if (data.reason === 'prompt_saved') {
+                console.log('✅ 提示语已保存，跳转到catimg');
+            // }else{
+            //   return false;
+            // }
+            
+            // 延迟跳转，让用户看到提示信息
+            setTimeout(() => {
+                window.open(data.redirect_url, '_blank');
+            }, 500);
+    // window.open('https://catimg.kagee.heiyu.space/', '_blank');
+})
+.catch(error => {
+    console.error('❌ 提交失败:', error);
+});
+    
+    
   }
 
  /**

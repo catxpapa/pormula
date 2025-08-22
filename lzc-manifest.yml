@@ -1,10 +1,11 @@
 name: 喵咒·AI Spellbook
 package: cloud.lazycat.app.aispellbook
-version: 1.0.0
+version: 1.1.0
 description: 用公式组合出无限变化的AI提示词
 author: CATxPAPA
 
 application:
+  multi_instance: true
   subdomain: aispellbook
   workdir: /lzcapp/pkg/content/
   
@@ -14,7 +15,7 @@ application:
     # - /css/=file:///lzcapp/pkg/content/web/css/
     # - /js/=file:///lzcapp/pkg/content/web/js/
     # - /test=file:///lzcapp/pkg/content/web/test.html
-    
+
   upstreams:
     # API后端服务
     - location: /api/
